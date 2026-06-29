@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Бесконечный кроссворд</title>
-  <meta name="description" content="Бесконечный HTML-кроссворд с темами слов, уровнями сложности, PWA-иконками и адаптацией под iPhone." />
+  <title>Бесконечные головоломки</title>
+  <meta name="description" content="Кроссворды и судоку в одном HTML-проекте для GitHub Pages: темы, сложности, визуальные оформления, PWA и адаптация под iPhone." />
   <meta name="theme-color" content="#090b12" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Кроссворд" />
+  <meta name="apple-mobile-web-app-title" content="Puzzle Hub" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icons/icon-180.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png" />
   <style>
     :root {
-      --bg: #090b12;
-      --bg2: #101524;
+      --bg: #080b12;
+      --bg2: #101727;
       --panel: rgba(255, 255, 255, 0.085);
       --panel2: rgba(255, 255, 255, 0.14);
-      --text: #f4f7ff;
-      --muted: rgba(244, 247, 255, 0.68);
+      --panel3: rgba(255, 255, 255, 0.06);
+      --text: #f5f7ff;
+      --muted: rgba(245, 247, 255, 0.68);
       --line: rgba(255, 255, 255, 0.15);
       --accent: #8fd3ff;
       --accent2: #b79cff;
@@ -27,310 +28,212 @@
       --bad: #ff7d8a;
       --warn: #ffd166;
       --cell: rgba(255, 255, 255, 0.96);
-      --cellText: #111827;
+      --cellText: #101828;
       --empty: rgba(255, 255, 255, 0.045);
       --selected: rgba(143, 211, 255, 0.35);
-      --cellCorrect: #cbf8df;
-      --cellWrong: #ffd2d8;
-      --cellHint: #ffe9a8;
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
       --radius: 28px;
     }
 
-    body[data-visual="classic"] {
-      --bg: #052014; --bg2: #0c3b26; --accent: #c8ff8f; --accent2: #5ee787;
-      --panel: rgba(235,255,232,.09); --panel2: rgba(235,255,232,.15);
-      --empty: rgba(200,255,143,.06); --selected: rgba(200,255,143,.35);
-    }
-
-    body[data-visual="neon"] {
-      --bg: #050711; --bg2: #131132; --accent: #00f5ff; --accent2: #ff4fd8;
-      --panel: rgba(0,245,255,.075); --panel2: rgba(255,79,216,.12);
-      --line: rgba(0,245,255,.22); --selected: rgba(255,79,216,.25);
-    }
-
-    body[data-visual="ocean"] {
-      --bg: #031926; --bg2: #063b52; --accent: #72f1ff; --accent2: #6ee7b7;
-      --panel: rgba(114,241,255,.08); --panel2: rgba(110,231,183,.13);
-      --selected: rgba(114,241,255,.32);
-    }
-
-    body[data-visual="forest"] {
-      --bg: #07170d; --bg2: #163820; --accent: #9cffac; --accent2: #d6ff7f;
-      --panel: rgba(156,255,172,.075); --panel2: rgba(214,255,127,.12);
-      --selected: rgba(156,255,172,.32);
-    }
-
-    body[data-visual="science"] {
-      --bg: #080b1a; --bg2: #1c2350; --accent: #a5b4fc; --accent2: #67e8f9;
-      --panel: rgba(165,180,252,.085); --panel2: rgba(103,232,249,.12);
-      --selected: rgba(165,180,252,.34);
-    }
-
-    body[data-visual="racing"] {
-      --bg: #0b0b0d; --bg2: #241113; --accent: #ff2d55; --accent2: #ffd166;
-      --panel: rgba(255,45,85,.075); --panel2: rgba(255,209,102,.13);
-      --line: rgba(255,255,255,.18); --selected: rgba(255,45,85,.25);
-    }
-
-    body[data-visual="sunset"] {
-      --bg: #21101f; --bg2: #4a1f35; --accent: #ffb86b; --accent2: #ff7aa2;
-      --panel: rgba(255,184,107,.08); --panel2: rgba(255,122,162,.12);
-      --selected: rgba(255,184,107,.30);
-    }
+    body[data-visual="classic"] { --bg:#052014; --bg2:#0c3b26; --accent:#c8ff8f; --accent2:#5ee787; --panel:rgba(235,255,232,.09); --panel2:rgba(235,255,232,.15); --selected:rgba(200,255,143,.36); }
+    body[data-visual="neon"] { --bg:#050711; --bg2:#161135; --accent:#00f5ff; --accent2:#ff4fd8; --panel:rgba(0,245,255,.075); --panel2:rgba(255,79,216,.12); --line:rgba(0,245,255,.22); --selected:rgba(255,79,216,.28); }
+    body[data-visual="ocean"] { --bg:#031926; --bg2:#063b52; --accent:#72f1ff; --accent2:#6ee7b7; --panel:rgba(114,241,255,.08); --panel2:rgba(110,231,183,.13); --selected:rgba(114,241,255,.32); }
+    body[data-visual="forest"] { --bg:#07170d; --bg2:#173821; --accent:#9cffac; --accent2:#d6ff7f; --panel:rgba(156,255,172,.075); --panel2:rgba(214,255,127,.12); --selected:rgba(156,255,172,.32); }
+    body[data-visual="science"] { --bg:#080b1a; --bg2:#1c2350; --accent:#a5b4fc; --accent2:#67e8f9; --panel:rgba(165,180,252,.085); --panel2:rgba(103,232,249,.12); --selected:rgba(165,180,252,.34); }
+    body[data-visual="racing"] { --bg:#0b0b0d; --bg2:#251114; --accent:#ff2d55; --accent2:#ffd166; --panel:rgba(255,45,85,.075); --panel2:rgba(255,209,102,.13); --line:rgba(255,255,255,.18); --selected:rgba(255,45,85,.25); }
+    body[data-visual="sunset"] { --bg:#21101f; --bg2:#4a1f35; --accent:#ffb86b; --accent2:#ff7aa2; --panel:rgba(255,184,107,.08); --panel2:rgba(255,122,162,.12); --selected:rgba(255,184,107,.30); }
+    body[data-visual="space"] { --bg:#030712; --bg2:#111b3d; --accent:#c4b5fd; --accent2:#38bdf8; --panel:rgba(196,181,253,.08); --panel2:rgba(56,189,248,.12); --selected:rgba(196,181,253,.30); }
+    body[data-visual="candy"] { --bg:#261021; --bg2:#4b143e; --accent:#ff9ad5; --accent2:#a7f3d0; --panel:rgba(255,154,213,.09); --panel2:rgba(167,243,208,.13); --selected:rgba(255,154,213,.33); }
+    body[data-visual="mono"] { --bg:#0f1115; --bg2:#1a1d24; --accent:#f5f5f5; --accent2:#9ca3af; --panel:rgba(255,255,255,.075); --panel2:rgba(255,255,255,.12); --selected:rgba(255,255,255,.22); }
+    body[data-visual="gold"] { --bg:#181006; --bg2:#35200a; --accent:#ffd166; --accent2:#ff9f1c; --panel:rgba(255,209,102,.08); --panel2:rgba(255,159,28,.13); --selected:rgba(255,209,102,.30); }
 
     body[data-mode="light"] {
-      --bg: #f5f7fb; --bg2: #e9eef9; --panel: rgba(255,255,255,.72); --panel2: rgba(255,255,255,.92);
-      --text: #101828; --muted: rgba(16,24,40,.64); --line: rgba(16,24,40,.12);
-      --cell: #ffffff; --cellText: #101828; --empty: rgba(16,24,40,.055); --shadow: 0 24px 70px rgba(31,41,55,.16);
+      --bg:#f5f7fb; --bg2:#e9eef9; --panel:rgba(255,255,255,.72); --panel2:rgba(255,255,255,.92); --panel3:rgba(16,24,40,.04);
+      --text:#101828; --muted:rgba(16,24,40,.64); --line:rgba(16,24,40,.12); --cell:#ffffff; --cellText:#101828; --empty:rgba(16,24,40,.055); --shadow:0 24px 70px rgba(31,41,55,.16);
     }
 
     * { box-sizing: border-box; }
-
     html { min-height: 100%; }
-
     body {
       margin: 0;
       min-height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 12% 10%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 30%),
+        radial-gradient(circle at 12% 10%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 30%),
         radial-gradient(circle at 84% 18%, color-mix(in srgb, var(--accent2) 24%, transparent), transparent 32%),
-        radial-gradient(circle at 45% 92%, color-mix(in srgb, var(--good) 16%, transparent), transparent 28%),
+        radial-gradient(circle at 45% 92%, color-mix(in srgb, var(--good) 15%, transparent), transparent 28%),
         linear-gradient(135deg, var(--bg), var(--bg2));
       overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      touch-action: manipulation;
     }
-
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,.042) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.042) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(255,255,255,.042) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.042) 1px, transparent 1px);
       background-size: 42px 42px;
       mask-image: radial-gradient(circle at center, black, transparent 78%);
       opacity: .55;
     }
-
     body[data-visual="racing"]::after {
       content: "";
       position: fixed;
-      inset: 0;
-      pointer-events: none;
+      inset: auto -100px 0 auto;
+      width: 520px;
+      height: 520px;
       opacity: .09;
-      background-image:
-        linear-gradient(45deg, #fff 25%, transparent 25%),
-        linear-gradient(-45deg, #fff 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #fff 75%),
-        linear-gradient(-45deg, transparent 75%, #fff 75%);
-      background-size: 38px 38px;
-      background-position: 0 0, 0 19px, 19px -19px, -19px 0px;
+      pointer-events: none;
+      background-image: linear-gradient(45deg, #fff 25%, transparent 25%), linear-gradient(-45deg, #fff 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #fff 75%), linear-gradient(-45deg, transparent 75%, #fff 75%);
+      background-size: 44px 44px;
+      transform: rotate(-12deg);
+    }
+    body[data-visual="space"]::after {
+      content: "✦ ✧ ✦ ✧ ✦ ✧";
+      position: fixed;
+      right: 8vw;
+      top: 12vh;
+      opacity: .14;
+      letter-spacing: 28px;
+      font-size: 28px;
+      pointer-events: none;
     }
 
-    .app {
-      width: min(1480px, calc(100vw - 28px));
-      margin: 0 auto;
-      padding: max(16px, env(safe-area-inset-top)) 0 max(36px, env(safe-area-inset-bottom));
-      position: relative;
-      z-index: 1;
-    }
+    .app { width: min(1500px, calc(100vw - 28px)); margin: 0 auto; padding: calc(18px + env(safe-area-inset-top)) 0 calc(40px + env(safe-area-inset-bottom)); position: relative; z-index: 1; }
+    .hero, .board-card, .side-card { border: 1px solid var(--line); background: linear-gradient(135deg, var(--panel), rgba(255,255,255,.035)); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); overflow: hidden; }
+    .hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; margin-bottom: 18px; padding: 20px; }
+    .brand { display: flex; gap: 16px; align-items: center; min-width: 0; }
+    .brand-icon { width: 62px; height: 62px; border-radius: 22px; flex: 0 0 auto; display: grid; place-items: center; color: #07111f; font-size: 31px; font-weight: 950; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 18px 48px color-mix(in srgb, var(--accent) 28%, transparent); }
+    .kicker { display:inline-flex; gap:8px; align-items:center; width:fit-content; padding:8px 12px; border-radius:999px; background:color-mix(in srgb, var(--accent) 14%, transparent); border:1px solid color-mix(in srgb, var(--accent) 28%, transparent); color:var(--accent); font-weight:850; letter-spacing:.02em; margin-bottom:10px; font-size:13px; }
+    h1 { margin:0; font-size:clamp(30px, 5vw, 64px); letter-spacing:-.065em; line-height:.98; }
+    .subtitle { margin: 12px 0 0; max-width: 860px; color: var(--muted); font-size: 17px; line-height: 1.5; }
+    .hero-actions { display: grid; grid-template-columns: repeat(3, max-content); gap: 10px; justify-content: end; }
 
-    .hero, .board-card, .side-card, .mini-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(135deg, var(--panel), rgba(255,255,255,.035));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 18px;
-      padding: 20px;
-      overflow: hidden;
-    }
-
-    .brand { display: flex; align-items: center; gap: 14px; }
-
-    .brand-icon {
-      width: 58px; height: 58px; border-radius: 18px;
-      display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #08111f; font-size: 30px; font-weight: 950;
-      box-shadow: 0 18px 40px color-mix(in srgb, var(--accent) 26%, transparent);
-      flex: none;
-    }
-
-    .kicker {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      width: fit-content;
-      padding: 7px 11px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--accent) 14%, transparent);
-      border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
-      color: var(--accent);
-      font-weight: 850;
-      letter-spacing: .02em;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    h1 { margin: 0; font-size: clamp(30px, 5vw, 62px); letter-spacing: -.065em; line-height: .98; }
-    .subtitle { margin: 10px 0 0; max-width: 760px; color: var(--muted); font-size: 16.5px; line-height: 1.5; }
-
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; align-items: center; }
-
-    button, select {
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: var(--panel2);
-      color: var(--text);
-      font: inherit;
-      font-weight: 850;
-      cursor: pointer;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease, opacity .15s ease;
-      box-shadow: 0 10px 28px rgba(0,0,0,.12);
-      min-height: 45px;
-    }
-
-    select { padding-right: 34px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 19px, calc(100% - 12px) 19px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
-    button:hover, select:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 13%, var(--panel2)); }
+    button, select { appearance:none; border:1px solid var(--line); border-radius:16px; padding:12px 14px; background:var(--panel2); color:var(--text); font:inherit; font-weight:850; cursor:pointer; transition:transform .15s ease, border-color .15s ease, background .15s ease, opacity .15s ease; box-shadow:0 10px 28px rgba(0,0,0,.12); min-height: 46px; }
+    select { padding-right: 38px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 20px, calc(100% - 12px) 20px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+    button:hover, select:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 44%, transparent); background: color-mix(in srgb, var(--accent) 12%, var(--panel2)); }
     button:active { transform: translateY(0) scale(.99); }
-    button.primary { color: #08111f; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-    button.good { color: #06130e; border-color: transparent; background: linear-gradient(135deg, var(--good), #b8f7d4); }
-    button.bad { color: #1b070a; border-color: transparent; background: linear-gradient(135deg, #ff8793, #ffd0d5); }
+    button.primary { color:#07111f; border-color:transparent; background:linear-gradient(135deg, var(--accent), var(--accent2)); }
+    button.good { color:#06130e; border-color:transparent; background:linear-gradient(135deg, var(--good), #b8f7d4); }
+    button.bad { color:#21070b; border-color:transparent; background:linear-gradient(135deg, #ff8793, #ffd0d5); }
+    button.is-active { color:#07111f; border-color:transparent; background:linear-gradient(135deg, var(--accent), var(--accent2)); }
 
-    .layout { display: grid; grid-template-columns: minmax(340px, 1fr) 450px; gap: 18px; align-items: start; }
-    .board-card, .side-card { overflow: hidden; }
-    .side-card { position: sticky; top: 14px; }
+    .game-switch { display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:18px; }
+    .game-switch button { min-height: 56px; font-size: 16px; }
+    .layout { display:grid; grid-template-columns:minmax(340px, 1fr) 440px; gap:18px; align-items:start; }
+    .board-top, .side-top { padding:16px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .metrics { display:flex; flex-wrap:wrap; gap:8px; }
+    .metric { padding:9px 11px; border-radius:14px; background:rgba(255,255,255,.08); border:1px solid var(--line); color:var(--muted); font-size:13px; font-weight:850; }
+    .metric strong { color:var(--text); margin-left:4px; }
+    .tiny { font-size:12px; color:var(--muted); line-height:1.45; }
+    .board-wrap { padding:18px; display:grid; place-items:center; overflow:auto; min-height:610px; }
+    .side-card { position:sticky; top:14px; }
+    .settings-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px 18px; border-bottom:1px solid var(--line); }
+    .settings-label { display:grid; gap:6px; color:var(--muted); font-size:12px; font-weight:850; }
+    .settings-label select { width:100%; }
+    .controls { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px 18px; border-bottom:1px solid var(--line); }
+    .controls button { width:100%; }
+    .status { margin:0 18px 14px; padding:13px 14px; border:1px solid var(--line); background:rgba(255,255,255,.07); border-radius:18px; color:var(--muted); line-height:1.4; min-height:48px; }
+    .quick-info { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0 18px 14px; }
+    .mini-card { padding:12px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.06); display:grid; gap:2px; }
+    .mini-card b { font-size:22px; color:var(--accent); }
+    .mini-card span { color:var(--muted); font-size:12px; line-height:1.35; }
 
-    .board-top, .side-top {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+    .crossword-grid { display:grid; gap:3px; width:min(100%, 760px); aspect-ratio:1/1; padding:8px; border-radius:24px; background:rgba(0,0,0,.15); border:1px solid var(--line); box-shadow:inset 0 0 0 1px rgba(255,255,255,.035); }
+    .cw-cell { position:relative; border-radius:9px; background:var(--empty); min-width:0; min-height:0; }
+    .cw-cell.active { background:var(--cell); color:var(--cellText); box-shadow:0 1px 0 rgba(255,255,255,.45) inset, 0 10px 22px rgba(0,0,0,.10); overflow:hidden; }
+    .cw-cell.selected-path.active { outline:2px solid var(--selected); outline-offset:-2px; background:linear-gradient(135deg, var(--cell), color-mix(in srgb, var(--accent) 18%, var(--cell))); }
+    .cw-cell input { width:100%; height:100%; padding:20% 5% 2%; border:0; background:transparent; color:var(--cellText); text-align:center; text-transform:uppercase; font-weight:950; font-size:clamp(12px,2.35vw,26px); outline:none; caret-color:var(--accent2); font-family:inherit; border-radius:inherit; }
+    .cw-cell input:focus { background:rgba(143,211,255,.20); box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent); }
+    .cw-cell.correct { background:#cbf8df; }
+    .cw-cell.wrong { background:#ffd2d8; animation:shake .16s linear 0s 2; }
+    .cw-cell.hinted { background:#ffe9a8; }
+    .cw-num { position:absolute; top:4px; left:5px; color:rgba(17,24,39,.62); font-size:clamp(8px,1.1vw,12px); font-weight:950; pointer-events:none; z-index:2; }
 
-    .metrics { display: flex; flex-wrap: wrap; gap: 8px; }
-    .metric { padding: 9px 11px; border-radius: 14px; background: rgba(255,255,255,.08); border: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 850; }
-    .metric strong { color: var(--text); margin-left: 4px; }
+    .sudoku-wrap { display:grid; gap:14px; justify-items:center; width:100%; }
+    .sudoku-grid { width:min(100%, 620px); aspect-ratio:1/1; display:grid; grid-template-columns:repeat(9,1fr); grid-template-rows:repeat(9,1fr); gap:0; border:4px solid color-mix(in srgb, var(--accent) 55%, var(--text)); border-radius:20px; overflow:hidden; background:var(--cell); box-shadow:0 22px 60px rgba(0,0,0,.22); }
+    .sd-cell { position:relative; border:1px solid rgba(16,24,40,.18); background:var(--cell); display:grid; place-items:center; }
+    .sd-cell:nth-child(3n) { border-right-width:3px; }
+    .sd-cell:nth-child(9n) { border-right-width:0; }
+    .sd-cell:nth-child(n+19):nth-child(-n+27), .sd-cell:nth-child(n+46):nth-child(-n+54) { border-bottom-width:3px; }
+    .sd-cell.fixed { background:color-mix(in srgb, var(--accent) 10%, var(--cell)); }
+    .sd-cell.related { background:#eef7ff; }
+    .sd-cell.same-number { background:#fff3bf; }
+    .sd-cell.selected { background:color-mix(in srgb, var(--accent) 28%, var(--cell)); outline:2px solid color-mix(in srgb, var(--accent) 70%, transparent); outline-offset:-2px; z-index:2; }
+    .sd-cell.wrong { background:#ffd2d8; animation:shake .16s linear 0s 2; }
+    .sd-cell.correct { background:#cbf8df; }
+    .sd-cell.hinted { background:#ffe9a8; }
+    .sd-cell input { width:100%; height:100%; border:0; outline:0; background:transparent; text-align:center; color:var(--cellText); font-family:inherit; font-size:clamp(20px, 5vw, 42px); font-weight:850; caret-color:var(--accent2); }
+    .sd-cell.fixed input { color:color-mix(in srgb, var(--accent2) 70%, #111827); font-weight:950; }
+    .sudoku-pad { display:grid; grid-template-columns:repeat(9,1fr); gap:6px; width:min(100%,620px); }
+    .sudoku-pad button { padding:10px 0; min-height:44px; border-radius:14px; font-size:18px; }
 
-    .board-wrap { padding: 18px; display: grid; place-items: center; overflow: auto; min-height: 570px; -webkit-overflow-scrolling: touch; }
-    .grid {
-      display: grid;
-      gap: 3px;
-      width: min(100%, 780px);
-      aspect-ratio: 1 / 1;
-      padding: 8px;
-      border-radius: 24px;
-      background: rgba(0, 0, 0, .16);
-      border: 1px solid var(--line);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.035);
-      touch-action: manipulation;
-    }
-
-    .cell { position: relative; border-radius: 9px; background: var(--empty); min-width: 0; min-height: 0; }
-    .cell.active { background: var(--cell); color: var(--cellText); box-shadow: 0 1px 0 rgba(255,255,255,.45) inset, 0 10px 22px rgba(0,0,0,.10); overflow: hidden; }
-    .cell.selected-path.active { outline: 2px solid var(--accent); outline-offset: -2px; background: linear-gradient(135deg, var(--cell), var(--selected)); }
-    .cell.correct { background: var(--cellCorrect); }
-    .cell.wrong { background: var(--cellWrong); animation: shake .16s linear 0s 2; }
-    .cell.hinted { background: var(--cellHint); }
-
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(2px); } }
-
-    .cell input {
-      width: 100%; height: 100%; padding: 20% 5% 2%; border: 0; background: transparent;
-      color: var(--cellText); text-align: center; text-transform: uppercase; font-weight: 950;
-      font-size: clamp(12px, 2.35vw, 27px); outline: none; caret-color: var(--accent2); font-family: inherit;
-    }
-    .cell input:focus { background: rgba(143, 211, 255, .22); box-shadow: inset 0 0 0 2px rgba(0,122,255,.45); }
-    .num { position: absolute; top: 4px; left: 5px; color: rgba(17,24,39,.62); font-size: clamp(8px, 1.1vw, 12px); font-weight: 950; pointer-events: none; z-index: 2; }
-
-    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-    .settings-grid .wide { grid-column: 1 / -1; }
-    .settings-label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
-    .settings-label select, .settings-label button { text-transform: none; letter-spacing: 0; font-size: 15px; }
-
-    .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-    .controls button, .controls select, .settings-grid button, .settings-grid select { width: 100%; }
-    .status { margin: 14px 18px; padding: 13px 14px; border: 1px solid var(--line); background: rgba(255,255,255,.07); border-radius: 18px; color: var(--muted); line-height: 1.4; min-height: 48px; }
-
-    .quick-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 18px 14px; }
-    .mini-card { border-radius: 18px; box-shadow: none; padding: 12px; }
-    .mini-card b { display: block; font-size: 20px; margin-bottom: 3px; }
-    .mini-card span { color: var(--muted); font-size: 12px; line-height: 1.35; }
-
-    .clues { padding: 0 18px 18px; max-height: 560px; overflow: auto; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
-    .clue-section { margin-top: 16px; }
-    .clue-title { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
-    .clue { display: grid; grid-template-columns: 36px 1fr auto; gap: 10px; align-items: start; padding: 10px; border: 1px solid transparent; border-radius: 16px; color: var(--muted); cursor: pointer; transition: background .15s ease, border-color .15s ease, color .15s ease; }
-    .clue:hover, .clue.selected { color: var(--text); border-color: color-mix(in srgb, var(--accent) 32%, transparent); background: color-mix(in srgb, var(--accent) 11%, transparent); }
-    .clue b { color: var(--text); }
-    .length { color: var(--accent); font-size: 12px; font-weight: 900; padding: 4px 7px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 13%, transparent); white-space: nowrap; }
-
-    .modal { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; padding: 20px; background: rgba(0,0,0,.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-    .modal.open { display: grid; }
-    .modal-card { width: min(620px, 100%); border: 1px solid var(--line); border-radius: 30px; background: radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%), radial-gradient(circle at 90% 30%, color-mix(in srgb, var(--accent2) 16%, transparent), transparent 34%), var(--bg); box-shadow: 0 28px 100px rgba(0,0,0,.5); padding: 26px; text-align: center; }
-    .modal-card h2 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 52px); letter-spacing: -.05em; }
-    .modal-card p { margin: 0 0 20px; color: var(--muted); line-height: 1.5; }
-    .modal-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .tiny { font-size: 12px; color: var(--muted); line-height: 1.45; }
-    .footer-note { margin-top: 14px; color: var(--muted); text-align: center; font-size: 13px; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 50%{transform:translateX(2px)} }
+    .clues { padding:0 18px 18px; max-height:610px; overflow:auto; scrollbar-width:thin; }
+    .clue-section { margin-top:16px; }
+    .clue-title { display:flex; align-items:center; gap:8px; margin:0 0 8px; font-size:15px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); }
+    .clue { display:grid; grid-template-columns:36px 1fr auto; gap:10px; align-items:start; padding:10px; border:1px solid transparent; border-radius:16px; color:var(--muted); cursor:pointer; transition:background .15s ease, border-color .15s ease, color .15s ease; }
+    .clue:hover, .clue.selected { color:var(--text); border-color:color-mix(in srgb, var(--accent) 28%, transparent); background:color-mix(in srgb, var(--accent) 10%, transparent); }
+    .clue b { color:var(--text); }
+    .length { color:var(--accent); font-size:12px; font-weight:900; padding:4px 7px; border-radius:999px; background:color-mix(in srgb, var(--accent) 13%, transparent); white-space:nowrap; }
+    .sudoku-help { padding:0 18px 18px; display:grid; gap:10px; }
+    .help-card { padding:13px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.06); color:var(--muted); line-height:1.45; }
+    .help-card b { color:var(--text); }
+    .hidden { display:none !important; }
+    .modal { position:fixed; inset:0; z-index:50; display:none; place-items:center; padding:20px; background:rgba(0,0,0,.45); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+    .modal.open { display:grid; }
+    .modal-card { width:min(600px,100%); border:1px solid var(--line); border-radius:30px; background:radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%), radial-gradient(circle at 90% 30%, color-mix(in srgb, var(--accent2) 16%, transparent), transparent 34%), var(--bg); box-shadow:0 28px 100px rgba(0,0,0,.5); padding:26px; text-align:center; }
+    .modal-card h2 { margin:0 0 8px; font-size:clamp(28px,5vw,52px); letter-spacing:-.05em; }
+    .modal-card p { margin:0 0 20px; color:var(--muted); line-height:1.5; }
+    .modal-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+    .footer-note { margin-top:14px; color:var(--muted); text-align:center; font-size:13px; }
 
     @media (max-width: 1080px) {
-      .hero, .layout { grid-template-columns: 1fr; }
-      .hero-actions { justify-content: flex-start; }
-      .side-card { position: static; }
-      .board-wrap { min-height: auto; }
-      .grid { width: min(94vw, 760px); }
-      .clues { max-height: none; }
+      .hero, .layout { grid-template-columns:1fr; }
+      .hero-actions { justify-content:start; grid-template-columns:repeat(3, minmax(0, max-content)); }
+      .side-card { position:static; }
+      .board-wrap { min-height:auto; }
+      .crossword-grid { width:min(94vw,720px); }
     }
-
-    @media (max-width: 640px) {
-      :root { --radius: 22px; }
-      .app { width: min(100vw - 14px, 1480px); padding-top: max(10px, env(safe-area-inset-top)); }
-      .hero { padding: 14px; }
-      .brand { align-items: flex-start; }
-      .brand-icon { width: 48px; height: 48px; border-radius: 15px; font-size: 25px; }
-      .subtitle { font-size: 14.5px; }
-      .hero-actions, .settings-grid, .controls, .quick-info { grid-template-columns: 1fr; }
-      .hero-actions button { width: 100%; }
-      .settings-grid { display: grid; }
-      .board-top, .side-top { align-items: flex-start; flex-direction: column; }
-      .board-wrap { padding: 8px; }
-      .grid { width: min(94vw, 720px); gap: 2px; padding: 5px; border-radius: 18px; }
-      .cell { border-radius: 5px; }
-      .num { top: 2px; left: 3px; }
-      .metrics { width: 100%; }
-      .metric { flex: 1 1 calc(50% - 8px); text-align: center; }
-      .clue { grid-template-columns: 30px 1fr; }
-      .length { display: none; }
-      button, select { min-height: 48px; }
+    @media (max-width: 680px) {
+      .app { width:min(100vw - 14px, 1500px); padding-top:calc(10px + env(safe-area-inset-top)); }
+      .hero, .board-card, .side-card { border-radius:22px; }
+      .hero { padding:14px; }
+      .brand { align-items:flex-start; }
+      .brand-icon { width:50px; height:50px; border-radius:18px; font-size:25px; }
+      .subtitle { font-size:14px; }
+      .hero-actions { grid-template-columns:1fr; width:100%; }
+      .hero-actions button { width:100%; }
+      .game-switch { grid-template-columns:1fr 1fr; gap:8px; }
+      .game-switch button { min-height:50px; padding:9px 8px; }
+      .board-top, .side-top { align-items:flex-start; flex-direction:column; }
+      .metrics { width:100%; display:grid; grid-template-columns:repeat(2,1fr); }
+      .metric { text-align:center; }
+      .board-wrap { padding:9px; }
+      .crossword-grid { gap:2px; padding:5px; border-radius:18px; width:min(94vw,620px); }
+      .cw-cell { border-radius:5px; }
+      .cw-num { top:2px; left:3px; }
+      .settings-grid, .controls, .quick-info { grid-template-columns:1fr; }
+      .clue { grid-template-columns:30px 1fr; }
+      .length { display:none; }
+      .sudoku-grid { border-width:3px; border-radius:16px; width:min(94vw,560px); }
+      .sd-cell input { font-size:clamp(18px, 7vw, 32px); }
+      .sudoku-pad { grid-template-columns:repeat(5,1fr); width:min(94vw,560px); }
+      .sudoku-pad button:last-child { grid-column:span 5; }
     }
   </style>
 </head>
-<body data-mode="dark" data-visual="classic">
+<body data-mode="dark" data-visual="classic" data-game="crossword">
   <main class="app">
     <section class="hero">
       <div class="brand">
         <div class="brand-icon">∞</div>
         <div>
           <div class="kicker">🧩 GitHub Pages / PWA / iPhone-ready</div>
-          <h1>Бесконечный кроссворд</h1>
-          <p class="subtitle">Выбирай тему слов: профессии, животные, наука, автоспорт, IT, финансы, география, еда или смешанный режим. Каждый запуск собирает новую сетку.</p>
+          <h1>Бесконечные головоломки</h1>
+          <p class="subtitle">Теперь в одном HTML-проекте есть кроссворды и судоку. Выбирай игру, тему слов, сложность и визуальный стиль — всё работает локально и через GitHub Pages.</p>
         </div>
       </div>
       <div class="hero-actions">
@@ -340,53 +243,49 @@
       </div>
     </section>
 
+    <div class="game-switch" role="tablist" aria-label="Выбор игры">
+      <button class="is-active" id="crosswordTab" role="tab">🧩 Кроссворд</button>
+      <button id="sudokuTab" role="tab">🔢 Судоку</button>
+    </div>
+
     <section class="layout">
       <div class="board-card">
         <div class="board-top">
           <div class="metrics">
             <div class="metric">Уровень <strong id="levelView">1</strong></div>
-            <div class="metric">Слова <strong id="wordsView">0</strong></div>
+            <div class="metric"><span id="metric2Label">Слова</span> <strong id="metric2View">0</strong></div>
             <div class="metric">Заполнено <strong id="filledView">0%</strong></div>
             <div class="metric">Время <strong id="timeView">00:00</strong></div>
           </div>
           <span class="tiny" id="seedView"></span>
         </div>
         <div class="board-wrap">
-          <div class="grid" id="grid" aria-label="Кроссворд"></div>
+          <div class="crossword-grid" id="crosswordGrid" aria-label="Кроссворд"></div>
+          <div class="sudoku-wrap hidden" id="sudokuWrap">
+            <div class="sudoku-grid" id="sudokuGrid" aria-label="Судоку"></div>
+            <div class="sudoku-pad" id="sudokuPad" aria-label="Цифровая клавиатура для судоку"></div>
+          </div>
         </div>
       </div>
 
       <aside class="side-card">
         <div class="side-top">
           <strong>⚙️ Настройки</strong>
-          <span class="tiny" id="categoryInfo">Темы и сложность</span>
+          <span class="tiny" id="gameInfo">Темы и сложность</span>
         </div>
 
         <div class="settings-grid">
-          <label class="settings-label">Тема кроссворда
+          <label class="settings-label" id="categoryLabel">Тема кроссворда
             <select id="categorySelect"></select>
           </label>
           <label class="settings-label">Сложность
-            <select id="difficultySelect">
-              <option value="easy">🟢 Новичок</option>
-              <option value="normal" selected>🔵 Нормальный</option>
-              <option value="hard">🟠 Сложный</option>
-              <option value="expert">🔴 Эксперт</option>
-            </select>
+            <select id="difficultySelect"></select>
           </label>
           <label class="settings-label">Визуальная тема
-            <select id="visualSelect">
-              <option value="classic">🟩 Классика</option>
-              <option value="neon">🌌 Неон</option>
-              <option value="ocean">🌊 Океан</option>
-              <option value="forest">🌲 Лес</option>
-              <option value="science">🔬 Лаборатория</option>
-              <option value="racing">🏁 Автоспорт</option>
-              <option value="sunset">🌅 Закат</option>
-            </select>
+            <select id="visualSelect"></select>
           </label>
           <label class="settings-label">Режим
-            <select id="modeSelect">
+            <select id="playModeSelect">
               <option value="relaxed">😌 Спокойный</option>
               <option value="classic" selected>🎯 Классический</option>
               <option value="challenge">⚡ Челлендж</option>
@@ -394,23 +293,32 @@
           </label>
         </div>
 
-        <div class="controls">
-          <button class="primary" id="checkBtn">✅ Проверить</button>
-          <button id="hintBtn">💡 Подсказка</button>
-          <button id="clearBtn">🧹 Очистить</button>
-          <button class="good" id="nextBtn">➡️ Следующий</button>
-          <button id="sameBtn">🔁 Пересобрать</button>
-          <button class="bad" id="revealBtn">👁 Показать всё</button>
+        <div class="controls" id="crosswordControls">
+          <button class="primary" id="cwCheckBtn">✅ Проверить</button>
+          <button id="cwHintBtn">💡 Подсказка</button>
+          <button id="cwClearBtn">🧹 Очистить</button>
+          <button class="good" id="cwNextBtn">➡️ Следующий</button>
+          <button id="cwRebuildBtn">🔁 Пересобрать</button>
+          <button class="bad" id="cwRevealBtn">👁 Показать всё</button>
         </div>
 
-        <p class="status" id="status">Готово. Выбери клетку и начни вводить ответы.</p>
+        <div class="controls hidden" id="sudokuControls">
+          <button class="primary" id="sdCheckBtn">✅ Проверить</button>
+          <button id="sdHintBtn">💡 Подсказка</button>
+          <button id="sdClearBtn">🧹 Очистить</button>
+          <button class="good" id="sdNextBtn">➡️ Следующее</button>
+          <button id="sdMistakesBtn">🎯 Ошибки: вкл</button>
+          <button class="bad" id="sdRevealBtn">👁 Решение</button>
+        </div>
+
+        <p class="status" id="status">Готово. Выбери игру и начни решать.</p>
 
         <div class="quick-info">
           <div class="mini-card"><b id="scoreView">0</b><span>Очки за текущий раунд</span></div>
           <div class="mini-card"><b id="hintsView">0</b><span>Использовано подсказок</span></div>
         </div>
 
-        <div class="clues">
+        <div class="clues" id="cluesBlock">
           <div class="clue-section">
             <h3 class="clue-title">→ По горизонтали</h3>
             <div id="acrossClues"></div>
@@ -420,18 +328,24 @@
             <div id="downClues"></div>
           </div>
         </div>
+
+        <div class="sudoku-help hidden" id="sudokuHelp">
+          <div class="help-card"><b>Как играть:</b> заполни поле цифрами 1–9 так, чтобы в каждой строке, столбце и квадрате 3×3 цифры не повторялись.</div>
+          <div class="help-card"><b>Управление:</b> на телефоне можно нажимать клетку и затем цифру снизу. На компьютере работают клавиши 1–9, Backspace и стрелки.</div>
+          <div class="help-card"><b>Сложность:</b> чем выше уровень, тем меньше стартовых цифр и больше очков за решение.</div>
+        </div>
       </aside>
     </section>
 
-    <p class="footer-note">Работает как обычный статический сайт: можно залить всю папку в репозиторий и включить GitHub Pages.</p>
+    <p class="footer-note">Статический проект: загрузи содержимое архива в корень репозитория и включи GitHub Pages.</p>
   </main>
 
   <div class="modal" id="winModal">
     <div class="modal-card">
-      <h2>🏆 Кроссворд решён!</h2>
-      <p id="winText">Отличный результат. Можно переходить к следующей бесконечной сетке.</p>
+      <h2 id="winTitle">🏆 Победа!</h2>
+      <p id="winText">Отличный результат. Можно переходить к следующей бесконечной головоломке.</p>
       <div class="modal-actions">
-        <button class="primary" id="modalNextBtn">Следующий кроссворд</button>
+        <button class="primary" id="modalNextBtn">Следующая головоломка</button>
         <button id="closeWinBtn">Закрыть</button>
       </div>
     </div>
@@ -440,10 +354,8 @@
   <div class="modal" id="installModal">
     <div class="modal-card">
       <h2>📱 Установка на iPhone</h2>
-      <p>Открой сайт в Safari, нажми кнопку «Поделиться», затем выбери «На экран Домой». Иконка уже добавлена в проект, поэтому кроссворд будет выглядеть как приложение.</p>
-      <div class="modal-actions">
-        <button class="primary" id="closeInstallBtn">Понятно</button>
-      </div>
+      <p>Открой сайт в Safari, нажми «Поделиться», затем выбери «На экран Домой». В проекте уже есть manifest, service worker и Apple Touch Icon.</p>
+      <div class="modal-actions"><button class="primary" id="closeInstallBtn">Понятно</button></div>
     </div>
   </div>
 
@@ -457,580 +369,489 @@
       it: { title: "💻 IT", note: "Код, сайты и технологии" },
       finance: { title: "💰 Финансы", note: "Деньги, банки и экономика" },
       geography: { title: "🌍 География", note: "Планета, страны и рельеф" },
-      food: { title: "🍕 Еда", note: "Блюда, продукты и кухня" }
+      food: { title: "🍕 Еда", note: "Блюда, продукты и кухня" },
+      sport: { title: "🏆 Спорт", note: "Игры, правила и соревнования" },
+      history: { title: "🏛️ История", note: "Эпохи, события и цивилизации" },
+      music: { title: "🎸 Музыка", note: "Инструменты, жанры и сцена" },
+      cinema: { title: "🎬 Кино и игры", note: "Фильмы, игровые термины и медиа" },
+      cars: { title: "🚗 Автомобили", note: "Детали, системы и дорога" },
+      space: { title: "🚀 Космос", note: "Планеты, звёзды и полёты" },
+      medicine: { title: "🩺 Медицина", note: "Здоровье, органы и лечение" }
     };
 
     const WORD_BANKS = {
       professions: [
-        ["ВРАЧ", "Специалист, который лечит людей"], ["УЧИТЕЛЬ", "Профессия в школе"], ["ИНЖЕНЕР", "Проектирует и рассчитывает системы"],
-        ["ПРОГРАММИСТ", "Пишет код"], ["ДИЗАЙНЕР", "Создаёт внешний вид продукта"], ["ПИЛОТ", "Управляет самолётом или болидом"],
-        ["ЮРИСТ", "Специалист по праву"], ["АРХИТЕКТОР", "Проектирует здания"], ["ПОВАР", "Готовит блюда"],
-        ["ФИНАНСИСТ", "Работает с деньгами и расчётами"], ["МАРКЕТОЛОГ", "Продвигает продукты и бренды"], ["АНАЛИТИК", "Ищет смысл в данных"],
-        ["ЖУРНАЛИСТ", "Готовит новости и материалы"], ["ФОТОГРАФ", "Создаёт снимки"], ["МЕХАНИК", "Ремонтирует технику"],
-        ["СТРОИТЕЛЬ", "Возводит здания"], ["БУХГАЛТЕР", "Ведёт учёт"], ["ПСИХОЛОГ", "Работает с поведением и эмоциями"],
-        ["АГРОНОМ", "Специалист по сельскому хозяйству"], ["ГЕОЛОГ", "Изучает земные породы"], ["РЕЖИССЕР", "Руководит постановкой фильма"],
-        ["АКТЕР", "Исполняет роли"], ["ТРЕНЕР", "Готовит спортсменов"], ["ПЕРЕВОДЧИК", "Передаёт смысл на другом языке"], ["МЕНЕДЖЕР", "Организует работу команды"]
+        ["ВРАЧ","Специалист, который лечит людей"],["УЧИТЕЛЬ","Профессия в школе"],["ИНЖЕНЕР","Проектирует и рассчитывает системы"],["ПРОГРАММИСТ","Пишет код"],["ДИЗАЙНЕР","Создаёт внешний вид продукта"],["ПИЛОТ","Управляет самолётом"],["ЮРИСТ","Специалист по праву"],["АРХИТЕКТОР","Проектирует здания"],["ПОВАР","Готовит блюда"],["ФИНАНСИСТ","Работает с деньгами и расчётами"],["МАРКЕТОЛОГ","Продвигает продукты и бренды"],["АНАЛИТИК","Ищет смысл в данных"],["ЖУРНАЛИСТ","Готовит новости и материалы"],["ФОТОГРАФ","Создаёт снимки"],["МЕХАНИК","Ремонтирует технику"],["СТРОИТЕЛЬ","Возводит здания"],["БУХГАЛТЕР","Ведёт учёт"],["ПСИХОЛОГ","Работает с поведением и эмоциями"],["АГРОНОМ","Специалист по сельскому хозяйству"],["ГЕОЛОГ","Изучает земные породы"],["РЕЖИССЕР","Руководит постановкой фильма"],["АКТЕР","Исполняет роли"],["ТРЕНЕР","Готовит спортсменов"],["ПЕРЕВОДЧИК","Передаёт смысл на другом языке"],["МЕНЕДЖЕР","Организует работу команды"],["СЦЕНАРИСТ","Пишет сюжет"],["БИОЛОГ","Изучает живые организмы"],["ЭКОНОМИСТ","Анализирует хозяйственные процессы"]
       ],
       animals: [
-        ["ТИГР", "Полосатая большая кошка"], ["СЛОН", "Крупное животное с хоботом"], ["ЖИРАФ", "Самое высокое наземное животное"],
-        ["КЕНГУРУ", "Австралийское животное с сумкой"], ["ПАНДА", "Чёрно-белый любитель бамбука"], ["ДЕЛЬФИН", "Умное морское млекопитающее"],
-        ["КОАЛА", "Австралийский зверёк, ест эвкалипт"], ["ЕНОТ", "Зверёк с маской на морде"], ["ЛИСА", "Рыжая хитрая героиня сказок"],
-        ["ВОЛК", "Дикий родственник собаки"], ["МЕДВЕДЬ", "Крупный лесной зверь"], ["БАРСУК", "Норное животное с полосами на голове"],
-        ["ПИНГВИН", "Птица, которая не летает, но отлично плавает"], ["ОРЕЛ", "Крупная хищная птица"], ["АКУЛА", "Морской хищник"],
-        ["ОСЬМИНОГ", "Морское животное с восемью щупальцами"], ["ЧЕРЕПАХА", "Животное с панцирем"], ["ХАМЕЛЕОН", "Ящерица, меняющая цвет"],
-        ["КРОКОДИЛ", "Опасная рептилия с мощной пастью"], ["БЕЛКА", "Прыгает по деревьям и любит орехи"], ["НОСОРОГ", "Крупное животное с рогом"],
-        ["БЕГЕМОТ", "Крупный обитатель рек Африки"], ["ГЕПАРД", "Очень быстрый хищник"], ["ЛЕОПАРД", "Пятнистая большая кошка"], ["ФЛАМИНГО", "Розовая птица на длинных ногах"]
+        ["ТИГР","Полосатая большая кошка"],["СЛОН","Крупное животное с хоботом"],["ЖИРАФ","Самое высокое наземное животное"],["КЕНГУРУ","Австралийское животное с сумкой"],["ПАНДА","Чёрно-белый любитель бамбука"],["ДЕЛЬФИН","Умное морское млекопитающее"],["КОАЛА","Австралийский зверёк, ест эвкалипт"],["ЕНОТ","Зверёк с маской на морде"],["ЛИСА","Рыжая героиня сказок"],["ВОЛК","Дикий родственник собаки"],["МЕДВЕДЬ","Крупный лесной зверь"],["БАРСУК","Норное животное с полосами на голове"],["ПИНГВИН","Птица, которая не летает, но плавает"],["ОРЕЛ","Крупная хищная птица"],["АКУЛА","Морской хищник"],["ОСЬМИНОГ","Морское животное с восемью щупальцами"],["ЧЕРЕПАХА","Животное с панцирем"],["ХАМЕЛЕОН","Ящерица, меняющая цвет"],["КРОКОДИЛ","Рептилия с мощной пастью"],["БЕЛКА","Прыгает по деревьям и любит орехи"],["НОСОРОГ","Крупное животное с рогом"],["БЕГЕМОТ","Крупный обитатель рек Африки"],["ГЕПАРД","Очень быстрый хищник"],["ЛЕОПАРД","Пятнистая большая кошка"],["ФЛАМИНГО","Розовая птица на длинных ногах"],["АЛЬБАТРОС","Большая морская птица"],["МУРАВЕЙ","Насекомое из колонии"]
       ],
       science: [
-        ["АТОМ", "Мельчайшая частица химического элемента"], ["МОЛЕКУЛА", "Группа связанных атомов"], ["ЭНЕРГИЯ", "Способность совершать работу"],
-        ["ГРАВИТАЦИЯ", "Сила притяжения между телами"], ["ЭВОЛЮЦИЯ", "Постепенное развитие живых организмов"], ["ГИПОТЕЗА", "Научное предположение"],
-        ["ЭКСПЕРИМЕНТ", "Опыт для проверки идеи"], ["ЛАБОРАТОРИЯ", "Место для исследований"], ["МИКРОСКОП", "Прибор для увеличения малых объектов"],
-        ["ТЕЛЕСКОП", "Прибор для наблюдения далёких объектов"], ["КВАНТ", "Минимальная порция физической величины"], ["ФОТОН", "Частица света"],
-        ["ГЕНОМ", "Набор наследственной информации"], ["БАКТЕРИЯ", "Одноклеточный микроорганизм"], ["ВАКУУМ", "Пространство почти без вещества"],
-        ["ПЛАНЕТА", "Небесное тело, обращающееся вокруг звезды"], ["ОРБИТА", "Путь движения небесного тела"], ["ФОРМУЛА", "Краткая запись зависимости"],
-        ["РЕАКЦИЯ", "Превращение веществ"], ["МАГНИТ", "Тело с магнитным полем"], ["ПРОТОН", "Положительно заряженная частица"],
-        ["НЕЙТРОН", "Нейтральная частица ядра"], ["КЛЕТКА", "Основная единица живого организма"], ["ДНК", "Молекула наследственной информации"], ["СПЕКТР", "Разложение излучения по частотам"]
+        ["АТОМ","Мельчайшая частица химического элемента"],["МОЛЕКУЛА","Группа связанных атомов"],["ЭНЕРГИЯ","Способность совершать работу"],["ГРАВИТАЦИЯ","Сила притяжения между телами"],["ЭВОЛЮЦИЯ","Постепенное развитие организмов"],["ГИПОТЕЗА","Научное предположение"],["ЭКСПЕРИМЕНТ","Опыт для проверки идеи"],["ЛАБОРАТОРИЯ","Место для исследований"],["МИКРОСКОП","Прибор для увеличения малых объектов"],["ТЕЛЕСКОП","Прибор для наблюдения далёких объектов"],["КВАНТ","Минимальная порция физической величины"],["ФОТОН","Частица света"],["ГЕНОМ","Набор наследственной информации"],["БАКТЕРИЯ","Одноклеточный микроорганизм"],["ВАКУУМ","Пространство почти без вещества"],["ПЛАНЕТА","Небесное тело вокруг звезды"],["ОРБИТА","Путь движения небесного тела"],["ФОРМУЛА","Краткая запись зависимости"],["РЕАКЦИЯ","Превращение веществ"],["МАГНИТ","Тело с магнитным полем"],["ПРОТОН","Положительно заряженная частица"],["НЕЙТРОН","Нейтральная частица ядра"],["КЛЕТКА","Основная единица живого организма"],["СПЕКТР","Разложение излучения по частотам"],["ИЗОТОП","Разновидность атомов элемента"]
       ],
       motorsport: [
-        ["БОЛИД", "Гоночный автомобиль"], ["ТРАССА", "Дорога для гонки"], ["ПИТСТОП", "Быстрая остановка в боксах"],
-        ["ШИНА", "То, что соединяет машину с дорогой"], ["ДРИФТ", "Управляемый занос"], ["РАЛЛИ", "Гонки по дорогам и спецучасткам"],
-        ["КАРТИНГ", "Гонки на маленьких открытых машинах"], ["ПОДИУМ", "Место награждения лучших"], ["КВАЛИФИКАЦИЯ", "Заезд для определения стартовых мест"],
-        ["ГРАНПРИ", "Большой гоночный этап"], ["ОБГОН", "Манёвр для выхода вперёд"], ["ПЕЛОТОН", "Группа участников гонки"],
-        ["ДВИГАТЕЛЬ", "Силовой агрегат машины"], ["ТУРБИНА", "Устройство для наддува"], ["СПОЙЛЕР", "Элемент аэродинамики"],
-        ["АЭРОДИНАМИКА", "Наука о движении воздуха вокруг болида"], ["СЛИКИ", "Гоночные шины без протектора"], ["БОКСЫ", "Зона обслуживания команд"],
-        ["МЕХАНИК", "Член команды, работающий с машиной"], ["СТЮАРД", "Судья на гонке"], ["СТАРТ", "Начало заезда"], ["ФИНИШ", "Конец гонки"],
-        ["ШАССИ", "Основа конструкции автомобиля"], ["ПОВОРОТ", "Изгиб трассы"], ["АПЕКС", "Внутренняя точка поворота"]
+        ["БОЛИД","Гоночный автомобиль"],["ТРАССА","Дорога для гонки"],["ПИТСТОП","Быстрая остановка в боксах"],["ШИНА","Соединяет машину с дорогой"],["ДРИФТ","Управляемый занос"],["РАЛЛИ","Гонки по дорогам и спецучасткам"],["КАРТИНГ","Гонки на маленьких открытых машинах"],["ПОДИУМ","Место награждения лучших"],["КВАЛИФИКАЦИЯ","Заезд для стартовых мест"],["ГРАНПРИ","Большой гоночный этап"],["ОБГОН","Манёвр для выхода вперёд"],["ПЕЛОТОН","Группа участников гонки"],["ДВИГАТЕЛЬ","Силовой агрегат машины"],["ТУРБИНА","Устройство для наддува"],["СПОЙЛЕР","Элемент аэродинамики"],["АЭРОДИНАМИКА","Наука о движении воздуха вокруг болида"],["СЛИКИ","Гоночные шины без протектора"],["БОКСЫ","Зона обслуживания команд"],["МЕХАНИК","Член команды, работающий с машиной"],["СТЮАРД","Судья на гонке"],["СТАРТ","Начало заезда"],["ФИНИШ","Конец гонки"],["ШАССИ","Основа конструкции автомобиля"],["ПОВОРОТ","Изгиб трассы"],["АПЕКС","Внутренняя точка поворота"],["ДРС","Система снижения сопротивления"]
       ],
       it: [
-        ["АЛГОРИТМ", "Пошаговый способ решения задачи"], ["БРАУЗЕР", "Программа для просмотра сайтов"], ["СЕРВЕР", "Отвечает на запросы клиента"],
-        ["КЛИЕНТ", "Отправляет запрос серверу"], ["СКРИПТ", "Файл или блок выполняемого кода"], ["ФУНКЦИЯ", "Именованный блок кода"],
-        ["МАССИВ", "Список значений"], ["ОБЪЕКТ", "Набор свойств и значений"], ["ПЕРЕМЕННАЯ", "Именованное место хранения данных"],
-        ["КОНСОЛЬ", "Инструмент разработчика для сообщений"], ["КОММИТ", "Сохранённое изменение в Git"], ["РЕПОЗИТОРИЙ", "Хранилище проекта"],
-        ["ВЕТКА", "Параллельная линия разработки"], ["ИНТЕРФЕЙС", "Способ взаимодействия с программой"], ["АДАПТИВ", "Подстройка под разные экраны"],
-        ["КЭШ", "Временное хранилище для ускорения"], ["ДОМЕН", "Имя сайта"], ["ХОСТИНГ", "Место размещения сайта"], ["ПИКСЕЛЬ", "Минимальная точка изображения"],
-        ["РАЗМЕТКА", "Структура HTML-документа"], ["СТИЛЬ", "Оформление CSS"], ["ОТЛАДКА", "Поиск и исправление ошибок"], ["РЕЛИЗ", "Готовая версия продукта"], ["ПЛАГИН", "Дополнение к программе"]
+        ["АЛГОРИТМ","Пошаговый способ решения задачи"],["БРАУЗЕР","Программа для просмотра сайтов"],["СЕРВЕР","Отвечает на запросы клиента"],["КЛИЕНТ","Отправляет запрос серверу"],["СКРИПТ","Файл или блок выполняемого кода"],["ФУНКЦИЯ","Именованный блок кода"],["МАССИВ","Список значений"],["ОБЪЕКТ","Набор свойств и значений"],["ПЕРЕМЕННАЯ","Именованное место хранения данных"],["КОНСОЛЬ","Инструмент разработчика для сообщений"],["КОММИТ","Сохранённое изменение в Git"],["РЕПОЗИТОРИЙ","Хранилище проекта"],["ВЕТКА","Параллельная линия разработки"],["ИНТЕРФЕЙС","Способ взаимодействия с программой"],["АДАПТИВ","Подстройка под разные экраны"],["КЭШ","Временное хранилище для ускорения"],["ДОМЕН","Имя сайта"],["ХОСТИНГ","Место размещения сайта"],["ПИКСЕЛЬ","Минимальная точка изображения"],["РАЗМЕТКА","Структура HTML-документа"],["СТИЛЬ","Оформление CSS"],["ОТЛАДКА","Поиск и исправление ошибок"],["РЕЛИЗ","Готовая версия продукта"],["ПЛАГИН","Дополнение к программе"],["ФРЕЙМВОРК","Каркас для разработки"],["ПРОТОКОЛ","Правила обмена данными"]
       ],
       finance: [
-        ["БАНК", "Финансовая организация"], ["КРЕДИТ", "Деньги в долг с возвратом"], ["ДЕПОЗИТ", "Вклад в банке"],
-        ["ПРОЦЕНТ", "Плата за использование денег"], ["ИНФЛЯЦИЯ", "Рост общего уровня цен"], ["БЮДЖЕТ", "План доходов и расходов"],
-        ["АКЦИЯ", "Доля в компании"], ["ОБЛИГАЦИЯ", "Долговая ценная бумага"], ["ДИВИДЕНД", "Выплата владельцу акции"],
-        ["КАПИТАЛ", "Стоимость ресурсов и средств"], ["ПРИБЫЛЬ", "Доход минус расходы"], ["УБЫТОК", "Отрицательный финансовый результат"],
-        ["НАЛОГ", "Обязательный платёж государству"], ["ВАЛЮТА", "Денежная единица страны"], ["БИРЖА", "Организованный рынок торгов"],
-        ["ИНВЕСТОР", "Тот, кто вкладывает деньги"], ["РИСК", "Вероятность неблагоприятного исхода"], ["ЛИКВИДНОСТЬ", "Способность быстро превратиться в деньги"],
-        ["АКТИВ", "То, что имеет экономическую ценность"], ["ПАССИВ", "Источник средств или обязательство"], ["БАЛАНС", "Финансовое равновесие показателей"], ["ДОХОД", "Поступление денег"], ["РАСХОД", "Трата денег"]
+        ["БАНК","Финансовая организация"],["КРЕДИТ","Деньги в долг с возвратом"],["ДЕПОЗИТ","Вклад в банке"],["ПРОЦЕНТ","Плата за использование денег"],["ИНФЛЯЦИЯ","Рост общего уровня цен"],["БЮДЖЕТ","План доходов и расходов"],["АКЦИЯ","Доля в компании"],["ОБЛИГАЦИЯ","Долговая ценная бумага"],["ДИВИДЕНД","Выплата владельцу акции"],["КАПИТАЛ","Стоимость ресурсов и средств"],["ПРИБЫЛЬ","Доход минус расходы"],["УБЫТОК","Отрицательный финансовый результат"],["НАЛОГ","Обязательный платёж государству"],["ВАЛЮТА","Денежная единица страны"],["БИРЖА","Организованный рынок торгов"],["ИНВЕСТОР","Тот, кто вкладывает деньги"],["РИСК","Вероятность неблагоприятного исхода"],["ЛИКВИДНОСТЬ","Способность быстро превратиться в деньги"],["АКТИВ","То, что имеет экономическую ценность"],["ПАССИВ","Источник средств или обязательство"],["БАЛАНС","Финансовое равновесие показателей"],["ДОХОД","Поступление денег"],["РАСХОД","Трата денег"],["МАРЖА","Разница между ценой и затратами"]
       ],
       geography: [
-        ["МАТЕРИК", "Крупный массив суши"], ["ОКЕАН", "Огромная часть мировых вод"], ["МОРЕ", "Часть океана у суши"],
-        ["РЕКА", "Водный поток"], ["ОЗЕРО", "Водоём внутри суши"], ["ГОРА", "Высокая форма рельефа"],
-        ["РАВНИНА", "Плоская или слабохолмистая местность"], ["ПУСТЫНЯ", "Сухая территория с малым количеством осадков"], ["ТУНДРА", "Природная зона с вечной мерзлотой"],
-        ["СТЕПЬ", "Безлесная травянистая зона"], ["КЛИМАТ", "Многолетний режим погоды"], ["ШИРОТА", "Координата к северу или югу"],
-        ["ДОЛГОТА", "Координата к востоку или западу"], ["КАРТА", "Изображение поверхности Земли"], ["ГЛОБУС", "Модель Земли"],
-        ["СТОЛИЦА", "Главный город государства"], ["ГРАНИЦА", "Линия раздела территорий"], ["ОСТРОВ", "Суша, окружённая водой"],
-        ["ПОЛУОСТРОВ", "Суша, окружённая водой с трёх сторон"], ["ВУЛКАН", "Гора с каналом для магмы"], ["ЛЕДНИК", "Масса многолетнего льда"], ["ЗАЛИВ", "Часть моря, вдающаяся в сушу"]
+        ["МАТЕРИК","Крупный массив суши"],["ОКЕАН","Огромная часть мировых вод"],["МОРЕ","Часть океана у суши"],["РЕКА","Водный поток"],["ОЗЕРО","Водоём внутри суши"],["ГОРА","Высокая форма рельефа"],["РАВНИНА","Плоская или слабохолмистая местность"],["ПУСТЫНЯ","Сухая территория с малым количеством осадков"],["ТУНДРА","Природная зона с вечной мерзлотой"],["СТЕПЬ","Безлесная травянистая зона"],["КЛИМАТ","Многолетний режим погоды"],["ШИРОТА","Координата к северу или югу"],["ДОЛГОТА","Координата к востоку или западу"],["КАРТА","Изображение поверхности Земли"],["ГЛОБУС","Модель Земли"],["СТОЛИЦА","Главный город государства"],["ГРАНИЦА","Линия раздела территорий"],["ОСТРОВ","Суша, окружённая водой"],["ПОЛУОСТРОВ","Суша, окружённая водой с трёх сторон"],["ВУЛКАН","Гора с каналом для магмы"],["ЛЕДНИК","Масса многолетнего льда"],["ЗАЛИВ","Часть моря, вдающаяся в сушу"],["ПРОЛИВ","Водный проход между сушей"]
       ],
       food: [
-        ["ПИЦЦА", "Итальянское блюдо с начинкой на тесте"], ["ПАСТА", "Итальянские макаронные изделия"], ["СУШИ", "Японское блюдо с рисом"],
-        ["БУРГЕР", "Булочка с котлетой и начинкой"], ["САЛАТ", "Блюдо из нарезанных ингредиентов"], ["СУП", "Жидкое первое блюдо"],
-        ["БОРЩ", "Свекольный суп"], ["ПЛОВ", "Блюдо из риса и мяса"], ["СТЕЙК", "Кусок жареного мяса"],
-        ["КОФЕ", "Бодрящий напиток из зёрен"], ["ЧАЙ", "Горячий напиток из листьев"], ["СЫР", "Молочный продукт"],
-        ["ХЛЕБ", "Выпечка из муки"], ["МОЛОКО", "Белый напиток животного происхождения"], ["ЯБЛОКО", "Популярный фрукт"],
-        ["БАНАН", "Жёлтый тропический фрукт"], ["АПЕЛЬСИН", "Цитрус оранжевого цвета"], ["КАРТОФЕЛЬ", "Овощ для фри и пюре"],
-        ["МОРКОВЬ", "Оранжевый корнеплод"], ["ТОМАТ", "Красный овощ или ягода"], ["ШОКОЛАД", "Сладость из какао"], ["ПЕЧЕНЬЕ", "Небольшая сладкая выпечка"], ["ОМЛЕТ", "Блюдо из яиц"]
+        ["ПИЦЦА","Итальянское блюдо с начинкой на тесте"],["ПАСТА","Итальянские макаронные изделия"],["СУШИ","Японское блюдо с рисом"],["БУРГЕР","Булочка с котлетой и начинкой"],["САЛАТ","Блюдо из нарезанных ингредиентов"],["БОРЩ","Свекольный суп"],["ПЛОВ","Блюдо из риса и мяса"],["СТЕЙК","Кусок жареного мяса"],["КОФЕ","Бодрящий напиток из зёрен"],["ЧАЙ","Горячий напиток из листьев"],["СЫР","Молочный продукт"],["ХЛЕБ","Выпечка из муки"],["МОЛОКО","Белый напиток животного происхождения"],["ЯБЛОКО","Популярный фрукт"],["БАНАН","Жёлтый тропический фрукт"],["АПЕЛЬСИН","Цитрус оранжевого цвета"],["КАРТОФЕЛЬ","Овощ для фри и пюре"],["МОРКОВЬ","Оранжевый корнеплод"],["ТОМАТ","Красный овощ или ягода"],["ШОКОЛАД","Сладость из какао"],["ПЕЧЕНЬЕ","Небольшая сладкая выпечка"],["ОМЛЕТ","Блюдо из яиц"],["РАМЕН","Японский суп с лапшой"],["ЛИМОНАД","Сладкий прохладительный напиток"]
+      ],
+      sport: [
+        ["ФУТБОЛ","Игра с мячом и воротами"],["ХОККЕЙ","Игра на льду с шайбой"],["БАСКЕТБОЛ","Игра с кольцом и мячом"],["ТЕННИС","Игра с ракеткой и сеткой"],["ВОЛЕЙБОЛ","Игра с мячом через сетку"],["БОКС","Единоборство в перчатках"],["БЕГ","Лёгкоатлетическая дисциплина"],["МАРАФОН","Длинная беговая дистанция"],["СТАДИОН","Место проведения спортивных матчей"],["ТРЕНЕР","Готовит спортсменов"],["КОМАНДА","Группа игроков"],["ТУРНИР","Соревнование из серии матчей"],["РЕКОРД","Лучший результат"],["ПЕНАЛЬТИ","Удар с одиннадцати метров"],["ВРАТАРЬ","Игрок, защищающий ворота"],["КАПИТАН","Лидер команды"],["МЕДАЛЬ","Награда спортсмена"],["ОЛИМПИАДА","Главные международные спортивные игры"]
+      ],
+      history: [
+        ["ИМПЕРИЯ","Большое государство с зависимыми территориями"],["РЕВОЛЮЦИЯ","Резкое изменение общественного строя"],["ДИНАСТИЯ","Ряд правителей из одного рода"],["ЛЕТОПИСЬ","Историческая запись событий"],["АРХЕОЛОГИЯ","Наука о древностях по находкам"],["ЦИВИЛИЗАЦИЯ","Развитое общество с культурой и институтами"],["СРЕДНЕВЕКОВЬЕ","Историческая эпоха между древностью и новым временем"],["АНТИЧНОСТЬ","Эпоха Древней Греции и Рима"],["ФАРАОН","Правитель Древнего Египта"],["СЕНАТ","Совет в Древнем Риме"],["РЫЦАРЬ","Воин Средневековья"],["ЗАМОК","Укреплённое жилище феодала"],["ХРОНИКА","Последовательная запись событий"],["РЕФОРМА","Преобразование системы"],["КОЛОНИЯ","Зависимая территория"],["ДОГОВОР","Соглашение сторон"],["АРХИВ","Хранилище исторических документов"],["МОНАРХ","Единоличный правитель"]
+      ],
+      music: [
+        ["ГИТАРА","Струнный инструмент"],["БАРАБАН","Ударный инструмент"],["ПИАНИНО","Клавишный инструмент"],["МЕЛОДИЯ","Последовательность звуков"],["РИТМ","Чередование длительностей"],["АККОРД","Созвучие из нескольких нот"],["БАСС","Низкая музыкальная партия"],["ВОКАЛ","Пение голосом"],["КУПЛЕТ","Часть песни до припева"],["ПРИПЕВ","Повторяющаяся часть песни"],["АЛЬБОМ","Сборник музыкальных треков"],["СИНТЕЗАТОР","Электронный музыкальный инструмент"],["МИКШЕР","Устройство для сведения звука"],["КОНЦЕРТ","Публичное музыкальное выступление"],["ОРКЕСТР","Большой коллектив музыкантов"],["ДИРИЖЕР","Руководит оркестром"],["ЖАНР","Тип музыки"],["ТЕМП","Скорость исполнения"]
+      ],
+      cinema: [
+        ["ФИЛЬМ","Произведение киноискусства"],["СЕРИАЛ","История из нескольких эпизодов"],["АКТЕР","Исполняет роль"],["РЕЖИССЕР","Руководит съёмкой"],["СЦЕНАРИЙ","Текст будущего фильма"],["КАМЕРА","Устройство для съёмки"],["МОНТАЖ","Сборка кадров"],["САУНДТРЕК","Музыка к фильму или игре"],["ПЕРСОНАЖ","Герой истории"],["УРОВЕНЬ","Этап в игре"],["БОСС","Сильный противник в игре"],["КВЕСТ","Задание в игре"],["КОНСОЛЬ","Игровое устройство или инструмент разработчика"],["ПИКСЕЛЬ","Точка изображения"],["ГРАФИКА","Визуальная часть игры"],["СЦЕНА","Отдельный эпизод"],["ТРЕЙЛЕР","Короткий рекламный ролик"],["ФИНАЛ","Завершение истории"]
+      ],
+      cars: [
+        ["МОТОР","Двигатель автомобиля"],["КОРОБКА","Узел переключения передач"],["СЦЕПЛЕНИЕ","Связывает двигатель и трансмиссию"],["ПОДВЕСКА","Система колёс и амортизаторов"],["ТОРМОЗ","Система замедления"],["РУЛЬ","Управляет направлением движения"],["КУЗОВ","Внешняя конструкция автомобиля"],["ФАРА","Источник света спереди"],["БАМПЕР","Защитная деталь кузова"],["РАДИАТОР","Охлаждает двигатель"],["БЕНЗИН","Топливо для ДВС"],["АККУМУЛЯТОР","Источник электричества"],["САЛОН","Внутренняя часть автомобиля"],["ДВЕРЬ","Открывает доступ в салон"],["КОЛЕСО","Круглая опора машины"],["ДИСК","Часть колеса"],["ПРОБЕГ","Расстояние, пройденное автомобилем"],["ГАРАЖ","Место хранения автомобиля"],["МАСЛО","Смазочная жидкость двигателя"]
+      ],
+      space: [
+        ["КОСМОС","Пространство за пределами Земли"],["РАКЕТА","Аппарат для полёта в космос"],["СПУТНИК","Объект на орбите планеты"],["АСТЕРОИД","Малое каменное тело"],["КОМЕТА","Ледяное тело с хвостом"],["ГАЛАКТИКА","Огромная система звёзд"],["ТУМАННОСТЬ","Облако газа и пыли"],["ОРБИТА","Путь движения вокруг тела"],["МАРС","Красная планета"],["ВЕНЕРА","Планета с плотной атмосферой"],["ЮПИТЕР","Самая большая планета Солнечной системы"],["САТУРН","Планета с кольцами"],["СКАФАНДР","Костюм космонавта"],["КОСМОНАВТ","Человек, летающий в космос"],["СТАНЦИЯ","Обитаемый объект на орбите"],["ЗВЕЗДА","Светящееся небесное тело"],["СОЛНЦЕ","Ближайшая к Земле звезда"],["ЛУНА","Естественный спутник Земли"]
+      ],
+      medicine: [
+        ["СЕРДЦЕ","Орган, перекачивающий кровь"],["ЛЕГКИЕ","Органы дыхания"],["МОЗГ","Главный орган нервной системы"],["ПУЛЬС","Ритм сердечных сокращений"],["АНАЛИЗ","Исследование биоматериала"],["ДИАГНОЗ","Определение заболевания"],["ТЕРАПИЯ","Лечение"],["ВАКЦИНА","Средство для формирования иммунитета"],["ИММУНИТЕТ","Защита организма"],["АПТЕКА","Место продажи лекарств"],["ХИРУРГ","Врач, который оперирует"],["ПАЦИЕНТ","Человек, получающий медицинскую помощь"],["РЕЦЕПТ","Назначение лекарства"],["СИМПТОМ","Признак заболевания"],["ВИТАМИН","Вещество, нужное организму"],["ДАВЛЕНИЕ","Показатель работы сосудов"],["СКЕЛЕТ","Каркас тела из костей"],["МЫШЦА","Орган движения"]
       ]
     };
 
     const DIFFICULTY = {
-      easy: { size: 11, count: 6, min: 5, label: "Новичок", score: 1, maxHints: 8 },
-      normal: { size: 15, count: 10, min: 8, label: "Нормальный", score: 1.35, maxHints: 6 },
-      hard: { size: 17, count: 14, min: 10, label: "Сложный", score: 1.75, maxHints: 4 },
-      expert: { size: 19, count: 18, min: 12, label: "Эксперт", score: 2.2, maxHints: 3 }
+      beginner: { label:"Новичок", icon:"🟢", cwSize:11, cwCount:6, cwMin:5, sudokuGivens:48, score:1, maxHints:9 },
+      easy: { label:"Любитель", icon:"🔵", cwSize:13, cwCount:8, cwMin:6, sudokuGivens:42, score:1.18, maxHints:7 },
+      normal: { label:"Продвинутый", icon:"🟣", cwSize:15, cwCount:11, cwMin:8, sudokuGivens:36, score:1.42, maxHints:6 },
+      hard: { label:"Сложный", icon:"🟠", cwSize:17, cwCount:15, cwMin:10, sudokuGivens:30, score:1.82, maxHints:4 },
+      expert: { label:"Эксперт", icon:"🔴", cwSize:19, cwCount:18, cwMin:12, sudokuGivens:25, score:2.35, maxHints:3 }
     };
 
-    const gridEl = document.getElementById("grid");
-    const acrossCluesEl = document.getElementById("acrossClues");
-    const downCluesEl = document.getElementById("downClues");
-    const statusEl = document.getElementById("status");
-    const levelView = document.getElementById("levelView");
-    const wordsView = document.getElementById("wordsView");
-    const filledView = document.getElementById("filledView");
-    const timeView = document.getElementById("timeView");
-    const seedView = document.getElementById("seedView");
-    const scoreView = document.getElementById("scoreView");
-    const hintsView = document.getElementById("hintsView");
-    const categoryInfo = document.getElementById("categoryInfo");
-    const winModal = document.getElementById("winModal");
-    const installModal = document.getElementById("installModal");
-    const categorySelect = document.getElementById("categorySelect");
-    const difficultySelect = document.getElementById("difficultySelect");
-    const visualSelect = document.getElementById("visualSelect");
-    const modeSelect = document.getElementById("modeSelect");
+    const VISUALS = {
+      classic:"🟩 Классика", neon:"🌌 Неон", ocean:"🌊 Океан", forest:"🌲 Лес", science:"🔬 Лаборатория", racing:"🏁 Автоспорт", sunset:"🌅 Закат", space:"🚀 Космос", candy:"🍬 Candy", mono:"⚪ Моно", gold:"🏆 Золото"
+    };
 
-    let puzzle = null;
-    let level = Number(localStorage.getItem("crosswordLevel") || 1);
-    let selectedClueId = null;
-    let timer = null;
-    let startedAt = Date.now();
-    let hintsUsed = 0;
-    let revealed = false;
-    let currentScore = 0;
+    const $ = id => document.getElementById(id);
+    const crosswordGrid = $("crosswordGrid"), sudokuGrid = $("sudokuGrid"), sudokuWrap = $("sudokuWrap"), sudokuPad = $("sudokuPad");
+    const categorySelect = $("categorySelect"), difficultySelect = $("difficultySelect"), visualSelect = $("visualSelect"), playModeSelect = $("playModeSelect");
+    const categoryLabel = $("categoryLabel"), cluesBlock = $("cluesBlock"), sudokuHelp = $("sudokuHelp");
+    const crosswordControls = $("crosswordControls"), sudokuControls = $("sudokuControls");
+    const crosswordTab = $("crosswordTab"), sudokuTab = $("sudokuTab");
+    const levelView = $("levelView"), metric2Label = $("metric2Label"), metric2View = $("metric2View"), filledView = $("filledView"), timeView = $("timeView"), seedView = $("seedView"), gameInfo = $("gameInfo"), statusEl = $("status"), scoreView = $("scoreView"), hintsView = $("hintsView");
+    const acrossCluesEl = $("acrossClues"), downCluesEl = $("downClues"), winModal = $("winModal"), installModal = $("installModal");
 
-    function normalizeWord(value) {
-      return String(value).toUpperCase().replaceAll("Ё", "Е").replace(/[^А-ЯA-Z]/g, "");
-    }
+    let app = {
+      game: localStorage.getItem("puzzlehubGame") || "crossword",
+      crosswordLevel: Number(localStorage.getItem("puzzlehubCrosswordLevel") || 1),
+      sudokuLevel: Number(localStorage.getItem("puzzlehubSudokuLevel") || 1),
+      timer: null,
+      startedAt: Date.now(),
+      hintsUsed: 0,
+      score: 0,
+      mistakesOn: true,
+      selectedSudoku: null
+    };
+
+    let cw = { puzzle:null, selectedClueId:null, revealed:false };
+    let sd = { puzzle:null, solution:null, givens:null, revealed:false };
+
+    function normalizeWord(value) { return String(value).toUpperCase().replaceAll("Ё","Е").replace(/[^А-ЯA-Z]/g, ""); }
+    function hashSeed(str) { let h=2166136261; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+    function mulberry32(seed) { return function(){ let t=seed+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }; }
+    function shuffle(arr, rand=Math.random) { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rand()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+    function formatTime(totalSeconds) { const m=String(Math.floor(totalSeconds/60)).padStart(2,"0"); const s=String(totalSeconds%60).padStart(2,"0"); return `${m}:${s}`; }
+    function setStatus(text) { statusEl.textContent = text; }
+    function safeId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()+Math.random()); }
+    function currentDiff() { return DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal; }
 
     function prepareBanks() {
       for (const key of Object.keys(WORD_BANKS)) {
-        WORD_BANKS[key] = WORD_BANKS[key]
-          .map(([w, c]) => ({ w: normalizeWord(w), c }))
-          .filter(x => x.w.length >= 3);
+        WORD_BANKS[key] = WORD_BANKS[key].map(([w,c]) => ({ w: normalizeWord(w), c })).filter(x => x.w.length >= 3);
       }
-      WORD_BANKS.mixed = Object.keys(WORD_BANKS)
-        .filter(k => k !== "mixed")
-        .flatMap(k => WORD_BANKS[k].map(x => ({ ...x, c: `${x.c} [${CATEGORY_META[k].title.replace(/^\S+\s/, "")}]` })));
+      WORD_BANKS.mixed = Object.keys(WORD_BANKS).filter(k => k !== "mixed").flatMap(k => WORD_BANKS[k].map(x => ({ ...x, c: `${x.c} [${CATEGORY_META[k].title.replace(/^\S+\s/,"")}]` })));
+    }
+    function fillSelects() {
+      categorySelect.innerHTML = Object.entries(CATEGORY_META).map(([key, meta]) => `<option value="${key}">${meta.title}</option>`).join("");
+      difficultySelect.innerHTML = Object.entries(DIFFICULTY).map(([key, d]) => `<option value="${key}">${d.icon} ${d.label}</option>`).join("");
+      difficultySelect.value = "normal";
+      visualSelect.innerHTML = Object.entries(VISUALS).map(([key, title]) => `<option value="${key}">${title}</option>`).join("");
     }
 
-    function fillCategorySelect() {
-      categorySelect.innerHTML = Object.entries(CATEGORY_META)
-        .map(([key, meta]) => `<option value="${key}">${meta.title}</option>`).join("");
+    function loadSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("puzzlehubSettings") || "{}");
+        if (saved.category && CATEGORY_META[saved.category]) categorySelect.value = saved.category;
+        if (saved.difficulty && DIFFICULTY[saved.difficulty]) difficultySelect.value = saved.difficulty;
+        if (saved.visual && VISUALS[saved.visual]) visualSelect.value = saved.visual;
+        if (saved.playMode) playModeSelect.value = saved.playMode;
+        if (saved.colorMode) document.body.dataset.mode = saved.colorMode;
+        if (saved.game) app.game = saved.game;
+      } catch(e) {}
+      document.body.dataset.visual = visualSelect.value;
+      $("modeBtn").textContent = document.body.dataset.mode === "light" ? "🌙 Тёмный режим" : "☀️ Светлый режим";
+    }
+    function saveSettings() {
+      localStorage.setItem("puzzlehubSettings", JSON.stringify({ game: app.game, category: categorySelect.value, difficulty: difficultySelect.value, visual: visualSelect.value, playMode: playModeSelect.value, colorMode: document.body.dataset.mode }));
     }
 
-    function mulberry32(seed) {
-      return function() {
-        let t = seed += 0x6D2B79F5;
-        t = Math.imul(t ^ t >>> 15, t | 1);
-        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-        return ((t ^ t >>> 14) >>> 0) / 4294967296;
-      };
+    function restartTimer() {
+      clearInterval(app.timer);
+      app.startedAt = Date.now();
+      timeView.textContent = "00:00";
+      app.timer = setInterval(() => timeView.textContent = formatTime(Math.floor((Date.now() - app.startedAt) / 1000)), 1000);
+    }
+    function updateScore() { scoreView.textContent = app.score; hintsView.textContent = app.hintsUsed; }
+
+    function setGame(game, shouldStart=false) {
+      app.game = game;
+      localStorage.setItem("puzzlehubGame", game);
+      document.body.dataset.game = game;
+      const isCw = game === "crossword";
+      crosswordTab.classList.toggle("is-active", isCw);
+      sudokuTab.classList.toggle("is-active", !isCw);
+      crosswordGrid.classList.toggle("hidden", !isCw);
+      sudokuWrap.classList.toggle("hidden", isCw);
+      crosswordControls.classList.toggle("hidden", !isCw);
+      sudokuControls.classList.toggle("hidden", isCw);
+      categoryLabel.classList.toggle("hidden", !isCw);
+      cluesBlock.classList.toggle("hidden", !isCw);
+      sudokuHelp.classList.toggle("hidden", isCw);
+      saveSettings();
+      if (shouldStart) startCurrentPuzzle(false);
+      else refreshMetrics();
     }
 
-    function hashSeed(str) {
-      let h = 2166136261;
-      for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
-      return h >>> 0;
+    function startCurrentPuzzle(nextLevel=false) {
+      winModal.classList.remove("open");
+      app.hintsUsed = 0;
+      app.score = 0;
+      updateScore();
+      if (app.game === "crossword") startCrossword(nextLevel);
+      else startSudoku(nextLevel);
     }
 
-    function shuffle(arr, rand) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function emptyGrid(size) { return Array.from({ length: size }, () => Array(size).fill(null)); }
-    function inBounds(grid, r, c) { return r >= 0 && c >= 0 && r < grid.length && c < grid.length; }
-
-    function getCurrentBank() {
-      const key = categorySelect.value || "mixed";
-      const bank = WORD_BANKS[key] || WORD_BANKS.mixed;
-      const maxLen = DIFFICULTY[difficultySelect.value].size - 2;
-      return bank.filter(x => x.w.length <= maxLen);
-    }
-
-    function canPlace(grid, word, row, col, dir, requireCross = true) {
-      const dr = dir === "down" ? 1 : 0;
-      const dc = dir === "across" ? 1 : 0;
+    function emptyGrid(size) { return Array.from({ length:size }, () => Array(size).fill(null)); }
+    function inBounds(grid, r, c) { return r>=0 && c>=0 && r<grid.length && c<grid.length; }
+    function canPlace(grid, word, row, col, dir, requireCross=true) {
+      const dr = dir === "down" ? 1 : 0, dc = dir === "across" ? 1 : 0;
       let crosses = 0;
-      const beforeR = row - dr, beforeC = col - dc;
-      const afterR = row + dr * word.length, afterC = col + dc * word.length;
-      if (inBounds(grid, beforeR, beforeC) && grid[beforeR][beforeC]) return null;
-      if (inBounds(grid, afterR, afterC) && grid[afterR][afterC]) return null;
-      for (let i = 0; i < word.length; i++) {
-        const r = row + dr * i, c = col + dc * i;
-        if (!inBounds(grid, r, c)) return null;
-        const existing = grid[r][c];
+      const beforeR=row-dr, beforeC=col-dc, afterR=row+dr*word.length, afterC=col+dc*word.length;
+      if (inBounds(grid,beforeR,beforeC) && grid[beforeR][beforeC]) return null;
+      if (inBounds(grid,afterR,afterC) && grid[afterR][afterC]) return null;
+      for (let i=0;i<word.length;i++) {
+        const r=row+dr*i, c=col+dc*i;
+        if (!inBounds(grid,r,c)) return null;
+        const existing=grid[r][c];
         if (existing && existing !== word[i]) return null;
         if (existing === word[i]) crosses++;
         else if (dir === "across") {
-          if (inBounds(grid, r - 1, c) && grid[r - 1][c]) return null;
-          if (inBounds(grid, r + 1, c) && grid[r + 1][c]) return null;
+          if (inBounds(grid,r-1,c) && grid[r-1][c]) return null;
+          if (inBounds(grid,r+1,c) && grid[r+1][c]) return null;
         } else {
-          if (inBounds(grid, r, c - 1) && grid[r][c - 1]) return null;
-          if (inBounds(grid, r, c + 1) && grid[r][c + 1]) return null;
+          if (inBounds(grid,r,c-1) && grid[r][c-1]) return null;
+          if (inBounds(grid,r,c+1) && grid[r][c+1]) return null;
         }
       }
       if (requireCross && crosses === 0) return null;
       return { crosses };
     }
-
-    function makeId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random()); }
-
     function placeWord(grid, entry, row, col, dir) {
-      const dr = dir === "down" ? 1 : 0, dc = dir === "across" ? 1 : 0;
-      for (let i = 0; i < entry.w.length; i++) grid[row + dr * i][col + dc * i] = entry.w[i];
-      return { id: makeId(), word: entry.w, clue: entry.c, row, col, dir, number: 0 };
+      const dr=dir==="down"?1:0, dc=dir==="across"?1:0;
+      for(let i=0;i<entry.w.length;i++) grid[row+dr*i][col+dc*i]=entry.w[i];
+      return { id:safeId(), word:entry.w, clue:entry.c, row, col, dir, number:0 };
     }
-
-    function generatePuzzle() {
-      const diff = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
-      const mode = modeSelect.value;
-      const levelBonus = Math.min(3, Math.floor(level / 5));
-      const size = Math.min(21, diff.size + (difficultySelect.value === "expert" ? 0 : levelBonus % 2));
-      const targetCount = Math.min(20, diff.count + levelBonus);
-      const minCount = Math.min(targetCount, diff.min + Math.floor(levelBonus / 2));
-      const seedText = `${Date.now()}-${level}-${categorySelect.value}-${difficultySelect.value}-${Math.random()}`;
+    function selectBank() {
+      const key = categorySelect.value;
+      const maxLen = currentDiff().cwSize - 2;
+      const base = WORD_BANKS[key] || WORD_BANKS.mixed;
+      const cleaned = base.filter(x => x.w.length <= maxLen);
+      if (cleaned.length < currentDiff().cwCount) return WORD_BANKS.mixed.filter(x => x.w.length <= maxLen);
+      return cleaned;
+    }
+    function generateCrossword() {
+      const diff = currentDiff();
+      const levelBonus = Math.min(4, Math.floor(app.crosswordLevel / 4));
+      const size = Math.min(21, diff.cwSize + (difficultySelect.value === "expert" ? 0 : levelBonus % 2));
+      const count = Math.min(20, diff.cwCount + levelBonus);
+      const min = Math.min(count, diff.cwMin + Math.floor(levelBonus / 2));
+      const seedText = `${Date.now()}-${app.crosswordLevel}-${categorySelect.value}-${difficultySelect.value}-${Math.random()}`;
       const rand = mulberry32(hashSeed(seedText));
-      const bank = getCurrentBank();
       let best = null;
-
-      for (let attempt = 0; attempt < 220; attempt++) {
-        const grid = emptyGrid(size);
-        const candidates = shuffle(bank, rand)
-          .slice(0, targetCount + 20)
-          .sort((a, b) => b.w.length - a.w.length || rand() - .5);
-        const first = candidates.shift();
-        if (!first) break;
-        const placed = [];
-        const firstDir = rand() > .5 ? "across" : "down";
-        const firstRow = firstDir === "across" ? Math.floor(size / 2) : Math.floor((size - first.w.length) / 2);
-        const firstCol = firstDir === "across" ? Math.floor((size - first.w.length) / 2) : Math.floor(size / 2);
-        placed.push(placeWord(grid, first, firstRow, firstCol, firstDir));
-
+      for (let attempt=0; attempt<160; attempt++) {
+        const grid=emptyGrid(size);
+        const candidates = shuffle(selectBank(), rand).slice(0, count + 24).sort((a,b) => b.w.length - a.w.length);
+        const placed=[];
+        const first=candidates.shift();
+        if (!first) continue;
+        placed.push(placeWord(grid, first, Math.floor(size/2), Math.floor((size-first.w.length)/2), "across"));
         for (const entry of candidates) {
-          if (placed.length >= targetCount) break;
-          const positions = [];
-          for (let wi = 0; wi < entry.w.length; wi++) {
-            const letter = entry.w[wi];
-            for (let r = 0; r < size; r++) {
-              for (let c = 0; c < size; c++) {
-                if (grid[r][c] !== letter) continue;
-                const ac = canPlace(grid, entry.w, r, c - wi, "across", true);
-                if (ac) positions.push({ row: r, col: c - wi, dir: "across", score: ac.crosses * 8 + rand() });
-                const dn = canPlace(grid, entry.w, r - wi, c, "down", true);
-                if (dn) positions.push({ row: r - wi, col: c, dir: "down", score: dn.crosses * 8 + rand() });
-              }
+          if (placed.length >= count) break;
+          const positions=[];
+          for (let wi=0; wi<entry.w.length; wi++) {
+            const letter=entry.w[wi];
+            for (let r=0; r<size; r++) for (let c=0; c<size; c++) {
+              if (grid[r][c] !== letter) continue;
+              const a=canPlace(grid, entry.w, r, c-wi, "across", true);
+              if (a) positions.push({row:r, col:c-wi, dir:"across", score:a.crosses*10 + rand()});
+              const d=canPlace(grid, entry.w, r-wi, c, "down", true);
+              if (d) positions.push({row:r-wi, col:c, dir:"down", score:d.crosses*10 + rand()});
             }
           }
           if (positions.length) {
-            positions.sort((a, b) => b.score - a.score);
-            const topN = mode === "challenge" ? 2 : 5;
-            const pick = positions[Math.floor(rand() * Math.min(topN, positions.length))];
+            positions.sort((a,b) => b.score - a.score);
+            const pick = positions[Math.floor(rand()*Math.min(5, positions.length))];
             placed.push(placeWord(grid, entry, pick.row, pick.col, pick.dir));
           }
         }
-
         if (!best || placed.length > best.placed.length) best = { grid, placed, seedText, size };
-        if (placed.length >= minCount) break;
+        if (placed.length >= min) break;
       }
-
       if (!best || best.placed.length < 4) throw new Error("Не удалось собрать кроссворд");
-      numberPuzzle(best);
+      numberCrossword(best);
       return best;
     }
-
-    function numberPuzzle(p) {
-      const starts = new Map();
-      const sorted = [...p.placed].sort((a, b) => a.row - b.row || a.col - b.col || a.dir.localeCompare(b.dir));
-      let number = 1;
+    function numberCrossword(p) {
+      const starts = new Map(); let number=1;
+      const sorted=[...p.placed].sort((a,b)=>a.row-b.row||a.col-b.col||a.dir.localeCompare(b.dir));
       for (const word of sorted) {
-        const key = `${word.row},${word.col}`;
+        const key=`${word.row},${word.col}`;
         if (!starts.has(key)) starts.set(key, number++);
-        word.number = starts.get(key);
+        word.number=starts.get(key);
       }
-      p.placed.sort((a, b) => a.number - b.number || a.dir.localeCompare(b.dir));
-      p.starts = starts;
+      p.placed.sort((a,b)=>a.number-b.number||a.dir.localeCompare(b.dir));
+      p.starts=starts;
     }
-
-    function renderPuzzle() {
-      gridEl.innerHTML = "";
-      acrossCluesEl.innerHTML = "";
-      downCluesEl.innerHTML = "";
-      selectedClueId = null;
-      hintsUsed = 0;
-      revealed = false;
-      currentScore = 0;
-      startedAt = Date.now();
-
-      const size = puzzle.size;
-      gridEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-      gridEl.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-      const startsReverse = {};
-      for (const [key, val] of puzzle.starts.entries()) startsReverse[key] = val;
-
-      for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-          const cell = document.createElement("div");
-          cell.className = "cell";
-          cell.dataset.row = r; cell.dataset.col = c;
-          const letter = puzzle.grid[r][c];
-          if (letter) {
-            cell.classList.add("active"); cell.dataset.solution = letter;
-            const key = `${r},${c}`;
-            if (startsReverse[key]) {
-              const num = document.createElement("span");
-              num.className = "num"; num.textContent = startsReverse[key];
-              cell.appendChild(num);
-            }
-            const input = document.createElement("input");
-            input.maxLength = 1; input.inputMode = "text"; input.autocomplete = "off"; input.autocapitalize = "characters"; input.spellcheck = false;
-            input.setAttribute("aria-label", `Клетка ${r + 1}, ${c + 1}`);
-            input.addEventListener("input", onCellInput);
-            input.addEventListener("keydown", onCellKeydown);
-            input.addEventListener("focus", () => highlightCellWords(r, c));
-            cell.appendChild(input);
-          }
-          gridEl.appendChild(cell);
+    function startCrossword(nextLevel=false) {
+      if (nextLevel) {
+        app.crosswordLevel++;
+        localStorage.setItem("puzzlehubCrosswordLevel", String(app.crosswordLevel));
+      }
+      cw.revealed = false;
+      cw.selectedClueId = null;
+      try { cw.puzzle = generateCrossword(); renderCrossword(); restartTimer(); }
+      catch(e) { console.error(e); setStatus("Не удалось собрать кроссворд. Попробуй другую тему или сложность."); }
+    }
+    function renderCrossword() {
+      crosswordGrid.innerHTML=""; acrossCluesEl.innerHTML=""; downCluesEl.innerHTML="";
+      const p=cw.puzzle, size=p.size;
+      crosswordGrid.style.gridTemplateColumns=`repeat(${size}, 1fr)`;
+      crosswordGrid.style.gridTemplateRows=`repeat(${size}, 1fr)`;
+      const startsReverse={}; for (const [key,val] of p.starts.entries()) startsReverse[key]=val;
+      for(let r=0;r<size;r++) for(let c=0;c<size;c++) {
+        const cell=document.createElement("div"); cell.className="cw-cell"; cell.dataset.row=r; cell.dataset.col=c;
+        const letter=p.grid[r][c];
+        if (letter) {
+          cell.classList.add("active"); cell.dataset.solution=letter;
+          const key=`${r},${c}`;
+          if (startsReverse[key]) { const num=document.createElement("span"); num.className="cw-num"; num.textContent=startsReverse[key]; cell.appendChild(num); }
+          const input=document.createElement("input"); input.maxLength=1; input.inputMode="text"; input.autocomplete="off";
+          input.addEventListener("input", onCwInput); input.addEventListener("keydown", onCwKeydown); input.addEventListener("focus", () => highlightCwCell(r,c));
+          cell.appendChild(input);
         }
+        crosswordGrid.appendChild(cell);
       }
-
-      puzzle.placed.filter(w => w.dir === "across").forEach(word => acrossCluesEl.appendChild(makeClue(word)));
-      puzzle.placed.filter(w => w.dir === "down").forEach(word => downCluesEl.appendChild(makeClue(word)));
-
-      wordsView.textContent = puzzle.placed.length;
-      levelView.textContent = level;
-      seedView.textContent = `seed ${hashSeed(puzzle.seedText).toString(16).slice(0, 6)}`;
-      categoryInfo.textContent = `${CATEGORY_META[categorySelect.value].note} · ${DIFFICULTY[difficultySelect.value].label}`;
-      hintsView.textContent = hintsUsed;
-      scoreView.textContent = currentScore;
-      updateProgress();
-      setStatus(`Новый кроссворд: ${CATEGORY_META[categorySelect.value].title}, сложность ${DIFFICULTY[difficultySelect.value].label}.`);
-      restartTimer();
+      p.placed.filter(w=>w.dir==="across").forEach(w=>acrossCluesEl.appendChild(makeClue(w)));
+      p.placed.filter(w=>w.dir==="down").forEach(w=>downCluesEl.appendChild(makeClue(w)));
+      setStatus(`Кроссворд готов: ${CATEGORY_META[categorySelect.value].title}, сложность ${currentDiff().label}.`);
+      refreshMetrics();
     }
-
     function makeClue(word) {
-      const el = document.createElement("div");
-      el.className = "clue"; el.dataset.id = word.id;
-      el.innerHTML = `<b>${word.number}</b><span>${word.clue}</span><span class="length">${word.word.length} букв</span>`;
-      el.addEventListener("click", () => selectClue(word.id, true));
-      return el;
+      const el=document.createElement("div"); el.className="clue"; el.dataset.id=word.id;
+      el.innerHTML=`<b>${word.number}</b><span>${word.clue}</span><span class="length">${word.word.length} букв</span>`;
+      el.addEventListener("click",()=>selectCwClue(word.id,true)); return el;
     }
-
-    function selectClue(id, focusStart = false) {
-      selectedClueId = id;
-      document.querySelectorAll(".clue").forEach(x => x.classList.toggle("selected", x.dataset.id === id));
-      document.querySelectorAll(".cell").forEach(x => x.classList.remove("selected-path"));
-      const word = puzzle.placed.find(w => w.id === id);
-      if (!word) return;
-      const coords = getWordCoords(word);
-      for (const [r, c] of coords) getCell(r, c)?.classList.add("selected-path");
-      if (focusStart) {
-        const firstEmpty = coords.map(([r, c]) => getInput(r, c)).find(inp => inp && !inp.value);
-        (firstEmpty || getInput(word.row, word.col))?.focus();
-      }
+    function getCwCell(r,c){ return crosswordGrid.querySelector(`.cw-cell[data-row="${r}"][data-col="${c}"]`); }
+    function getCwInput(r,c){ return getCwCell(r,c)?.querySelector("input") || null; }
+    function getWordCoords(word){ const out=[], dr=word.dir==="down"?1:0, dc=word.dir==="across"?1:0; for(let i=0;i<word.word.length;i++) out.push([word.row+dr*i, word.col+dc*i]); return out; }
+    function selectCwClue(id, focusStart=false) {
+      cw.selectedClueId=id;
+      document.querySelectorAll(".clue").forEach(x=>x.classList.toggle("selected", x.dataset.id===id));
+      document.querySelectorAll(".cw-cell").forEach(x=>x.classList.remove("selected-path"));
+      const word=cw.puzzle.placed.find(w=>w.id===id); if(!word) return;
+      const coords=getWordCoords(word);
+      coords.forEach(([r,c])=>getCwCell(r,c)?.classList.add("selected-path"));
+      if (focusStart) { const firstEmpty=coords.map(([r,c])=>getCwInput(r,c)).find(inp=>inp&&!inp.value); (firstEmpty||getCwInput(word.row,word.col))?.focus(); }
     }
-
-    function highlightCellWords(row, col) {
-      const hits = puzzle.placed.filter(word => getWordCoords(word).some(([r, c]) => r === row && c === col));
-      if (hits.length) selectClue((hits.find(w => w.id === selectedClueId) || hits[0]).id, false);
+    function highlightCwCell(row,col) { const hits=cw.puzzle.placed.filter(w=>getWordCoords(w).some(([r,c])=>r===row&&c===col)); if(hits.length) selectCwClue(hits.find(w=>w.id===cw.selectedClueId)?.id || hits[0].id, false); }
+    function onCwInput(e) { const input=e.target; input.value=normalizeWord(input.value).slice(0,1); const cell=input.closest(".cw-cell"); cell.classList.remove("wrong","correct","hinted"); refreshMetrics(); if(input.value) focusNextCw(Number(cell.dataset.row), Number(cell.dataset.col)); if (isCwSolved()) completeCurrentPuzzle(); }
+    function onCwKeydown(e) {
+      const cell=e.target.closest(".cw-cell"), r=Number(cell.dataset.row), c=Number(cell.dataset.col);
+      if(e.key==="Backspace"&&!e.target.value){ const prev=findAdjacentCw(r,c,"prev"); if(prev){ prev.focus(); prev.value=""; refreshMetrics(); } }
+      if(["ArrowRight","ArrowLeft","ArrowUp","ArrowDown"].includes(e.key)){ e.preventDefault(); const map={ArrowRight:[0,1],ArrowLeft:[0,-1],ArrowUp:[-1,0],ArrowDown:[1,0]}; let [dr,dc]=map[e.key], nr=r+dr, nc=c+dc; while(inBounds(cw.puzzle.grid,nr,nc)){ const inp=getCwInput(nr,nc); if(inp){ inp.focus(); return; } nr+=dr; nc+=dc; } }
+      if(e.key===" "||e.key==="Enter"){ e.preventDefault(); const hits=cw.puzzle.placed.filter(w=>getWordCoords(w).some(([rr,cc])=>rr===r&&cc===c)); if(hits.length>1){ const current=hits.findIndex(w=>w.id===cw.selectedClueId); selectCwClue(hits[(current+1)%hits.length].id,false); } }
     }
+    function focusNextCw(r,c){ const current=cw.puzzle.placed.find(w=>w.id===cw.selectedClueId); if(current){ const coords=getWordCoords(current); const idx=coords.findIndex(([rr,cc])=>rr===r&&cc===c); for(let i=idx+1;i<coords.length;i++){ const inp=getCwInput(coords[i][0],coords[i][1]); if(inp&&!inp.value){ inp.focus(); return; } } } const next=findAdjacentCw(r,c,"next"); if(next) next.focus(); }
+    function findAdjacentCw(r,c,mode){ const direction=cw.puzzle.placed.find(w=>w.id===cw.selectedClueId)?.dir||"across"; const step=mode==="next"?1:-1, dr=direction==="down"?step:0, dc=direction==="across"?step:0; let nr=r+dr,nc=c+dc; while(inBounds(cw.puzzle.grid,nr,nc)){ const inp=getCwInput(nr,nc); if(inp) return inp; nr+=dr; nc+=dc; } return null; }
+    function checkCrossword(silent=false){ let correct=0, wrong=0, empty=0; document.querySelectorAll(".cw-cell.active").forEach(cell=>{ const input=cell.querySelector("input"), val=normalizeWord(input.value); cell.classList.remove("correct","wrong","hinted"); if(!val) empty++; else if(val===cell.dataset.solution){ correct++; cell.classList.add("correct"); } else { wrong++; cell.classList.add("wrong"); } }); refreshMetrics(); if(!silent){ if(wrong===0&&empty===0) completeCurrentPuzzle(); else if(wrong===0) setStatus(`Ошибок нет. Осталось клеток: ${empty}.`); else setStatus(`Есть ошибки: ${wrong}. Правильных клеток: ${correct}.`); } return {correct,wrong,empty}; }
+    function isCwSolved(){ const inputs=[...crosswordGrid.querySelectorAll("input")]; return inputs.length && inputs.every(input=>normalizeWord(input.value)===input.closest(".cw-cell").dataset.solution); }
+    function hintCrossword(){ const max=currentDiff().maxHints; if(playModeSelect.value==="challenge" && app.hintsUsed>=max){ setStatus(`В челлендже лимит подсказок: ${max}.`); return; } const cells=[...document.querySelectorAll(".cw-cell.active")].filter(cell=>normalizeWord(cell.querySelector("input").value)!==cell.dataset.solution); if(!cells.length){ setStatus("Подсказка не нужна: всё правильно."); return; } const cell=cells[Math.floor(Math.random()*cells.length)], input=cell.querySelector("input"); input.value=cell.dataset.solution; cell.classList.remove("wrong"); cell.classList.add("hinted"); app.hintsUsed++; input.focus(); refreshMetrics(); updateScore(); setStatus(`Открыта одна буква. Подсказок: ${app.hintsUsed}.`); if(isCwSolved()) completeCurrentPuzzle(); }
+    function clearCrossword(){ crosswordGrid.querySelectorAll("input").forEach(i=>i.value=""); crosswordGrid.querySelectorAll(".cw-cell").forEach(c=>c.classList.remove("correct","wrong","hinted")); cw.revealed=false; app.hintsUsed=0; app.score=0; updateScore(); refreshMetrics(); restartTimer(); setStatus("Кроссворд очищен."); }
+    function revealCrossword(){ cw.revealed=true; document.querySelectorAll(".cw-cell.active").forEach(cell=>{ cell.querySelector("input").value=cell.dataset.solution; cell.classList.remove("wrong"); cell.classList.add("correct"); }); refreshMetrics(); setStatus("Все ответы кроссворда раскрыты."); }
 
-    function getWordCoords(word) {
-      const out = [], dr = word.dir === "down" ? 1 : 0, dc = word.dir === "across" ? 1 : 0;
-      for (let i = 0; i < word.word.length; i++) out.push([word.row + dr * i, word.col + dc * i]);
-      return out;
+    function baseSudokuSolution(rand) {
+      const base=3, side=9;
+      const pattern=(r,c)=>(base*(r%base)+Math.floor(r/base)+c)%side;
+      const rBase=[0,1,2];
+      const rows=shuffle(rBase,rand).flatMap(g=>shuffle(rBase,rand).map(r=>g*base+r));
+      const cols=shuffle(rBase,rand).flatMap(g=>shuffle(rBase,rand).map(c=>g*base+c));
+      const nums=shuffle([1,2,3,4,5,6,7,8,9],rand);
+      return rows.map(r=>cols.map(c=>nums[pattern(r,c)]));
     }
-    function getCell(r, c) { return gridEl.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`); }
-    function getInput(r, c) { return getCell(r, c)?.querySelector("input") || null; }
-
-    function onCellInput(e) {
-      const input = e.target;
-      input.value = normalizeWord(input.value).slice(0, 1);
-      const cell = input.closest(".cell");
-      cell.classList.remove("wrong", "correct", "hinted");
-      updateProgress();
-      if (input.value) focusNextFromCell(Number(cell.dataset.row), Number(cell.dataset.col));
-      if (isSolved()) completePuzzle();
+    function candidatesFor(board, row, col) {
+      if(board[row][col]) return [];
+      const used=new Set();
+      for(let i=0;i<9;i++){ used.add(board[row][i]); used.add(board[i][col]); }
+      const br=Math.floor(row/3)*3, bc=Math.floor(col/3)*3;
+      for(let r=br;r<br+3;r++) for(let c=bc;c<bc+3;c++) used.add(board[r][c]);
+      const out=[]; for(let n=1;n<=9;n++) if(!used.has(n)) out.push(n); return out;
     }
-
-    function onCellKeydown(e) {
-      const cell = e.target.closest(".cell"), r = Number(cell.dataset.row), c = Number(cell.dataset.col);
-      if (e.key === "Backspace" && !e.target.value) {
-        const prev = findAdjacentInput(r, c, "prev");
-        if (prev) { prev.focus(); prev.value = ""; updateProgress(); }
-      }
-      if (["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(e.key)) {
-        e.preventDefault();
-        const map = { ArrowRight: [0, 1], ArrowLeft: [0, -1], ArrowUp: [-1, 0], ArrowDown: [1, 0] };
-        const [dr, dc] = map[e.key];
-        let nr = r + dr, nc = c + dc;
-        while (inBounds(puzzle.grid, nr, nc)) {
-          const inp = getInput(nr, nc);
-          if (inp) { inp.focus(); return; }
-          nr += dr; nc += dc;
+    function countSudokuSolutions(board, limit=2) {
+      let count=0;
+      function solve() {
+        if(count>=limit) return;
+        let best=null, bestCands=null;
+        for(let r=0;r<9;r++) for(let c=0;c<9;c++) if(!board[r][c]) {
+          const cand=candidatesFor(board,r,c);
+          if(cand.length===0) return;
+          if(!best || cand.length<bestCands.length){ best=[r,c]; bestCands=cand; if(cand.length===1) break; }
         }
+        if(!best){ count++; return; }
+        const [r,c]=best;
+        for(const n of bestCands){ board[r][c]=n; solve(); board[r][c]=0; if(count>=limit) return; }
       }
-      if (e.key === " " || e.key === "Enter") {
-        e.preventDefault();
-        const hits = puzzle.placed.filter(word => getWordCoords(word).some(([rr, cc]) => rr === r && cc === c));
-        if (hits.length > 1) {
-          const current = hits.findIndex(w => w.id === selectedClueId);
-          selectClue(hits[(current + 1) % hits.length].id, false);
-        }
+      solve(); return count;
+    }
+    function generateSudoku() {
+      const diff=currentDiff();
+      const seedText = `${Date.now()}-${app.sudokuLevel}-${difficultySelect.value}-${Math.random()}`;
+      const rand=mulberry32(hashSeed(seedText));
+      const solution=baseSudokuSolution(rand);
+      const puzzle=solution.map(row=>row.slice());
+      const cells=shuffle(Array.from({length:81},(_,i)=>i),rand);
+      let givens=81;
+      for(const idx of cells){
+        if(givens <= diff.sudokuGivens) break;
+        const r=Math.floor(idx/9), c=idx%9, backup=puzzle[r][c];
+        puzzle[r][c]=0;
+        const copy=puzzle.map(row=>row.slice());
+        if(countSudokuSolutions(copy,2)!==1) puzzle[r][c]=backup;
+        else givens--;
       }
+      return { puzzle, solution, givens, seedText };
     }
-
-    function focusNextFromCell(r, c) {
-      const current = puzzle.placed.find(w => w.id === selectedClueId);
-      if (current) {
-        const coords = getWordCoords(current);
-        const idx = coords.findIndex(([rr, cc]) => rr === r && cc === c);
-        for (let i = idx + 1; i < coords.length; i++) {
-          const inp = getInput(coords[i][0], coords[i][1]);
-          if (inp && !inp.value) { inp.focus(); return; }
-        }
+    function startSudoku(nextLevel=false){
+      if(nextLevel){ app.sudokuLevel++; localStorage.setItem("puzzlehubSudokuLevel", String(app.sudokuLevel)); }
+      sd.revealed=false; app.selectedSudoku=null;
+      sd = { ...sd, ...generateSudoku() };
+      renderSudoku(); restartTimer(); setStatus(`Судоку готово: сложность ${currentDiff().label}, стартовых цифр ${sd.givens}.`); refreshMetrics();
+    }
+    function renderSudoku(){
+      sudokuGrid.innerHTML=""; sudokuPad.innerHTML="";
+      for(let r=0;r<9;r++) for(let c=0;c<9;c++) {
+        const cell=document.createElement("div"); cell.className="sd-cell"; cell.dataset.row=r; cell.dataset.col=c;
+        const input=document.createElement("input"); input.maxLength=1; input.inputMode="numeric"; input.pattern="[1-9]*"; input.autocomplete="off";
+        if(sd.puzzle[r][c]) { input.value=sd.puzzle[r][c]; input.readOnly=true; cell.classList.add("fixed"); }
+        input.addEventListener("input", onSdInput); input.addEventListener("keydown", onSdKeydown); input.addEventListener("focus",()=>selectSudokuCell(r,c));
+        cell.addEventListener("click",()=>{ input.focus(); selectSudokuCell(r,c); });
+        cell.appendChild(input); sudokuGrid.appendChild(cell);
       }
-      findAdjacentInput(r, c, "next")?.focus();
+      for(let n=1;n<=9;n++){ const b=document.createElement("button"); b.textContent=n; b.addEventListener("click",()=>putSudokuNumber(n)); sudokuPad.appendChild(b); }
+      const erase=document.createElement("button"); erase.textContent="⌫"; erase.addEventListener("click",()=>putSudokuNumber("")); sudokuPad.appendChild(erase);
+      refreshMetrics();
     }
-
-    function findAdjacentInput(r, c, mode) {
-      const direction = puzzle.placed.find(w => w.id === selectedClueId)?.dir || "across";
-      const step = mode === "next" ? 1 : -1;
-      const dr = direction === "down" ? step : 0, dc = direction === "across" ? step : 0;
-      let nr = r + dr, nc = c + dc;
-      while (inBounds(puzzle.grid, nr, nc)) {
-        const inp = getInput(nr, nc);
-        if (inp) return inp;
-        nr += dr; nc += dc;
-      }
-      return null;
-    }
-
-    function updateProgress() {
-      const inputs = [...gridEl.querySelectorAll("input")];
-      const filled = inputs.filter(i => i.value).length;
-      filledView.textContent = inputs.length ? `${Math.round((filled / inputs.length) * 100)}%` : "0%";
-      updateScorePreview();
-    }
-
-    function updateScorePreview() {
-      const seconds = Math.floor((Date.now() - startedAt) / 1000);
-      const diff = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
-      const filled = [...gridEl.querySelectorAll("input")].filter(i => i.value).length;
-      currentScore = Math.max(0, Math.round((filled * 12 + puzzle?.placed.length * 55 + level * 30 - seconds * 0.8 - hintsUsed * 60) * diff.score));
-      scoreView.textContent = currentScore;
-    }
-
-    function checkPuzzle(silent = false) {
-      let correct = 0, wrong = 0, empty = 0;
-      document.querySelectorAll(".cell.active").forEach(cell => {
-        const input = cell.querySelector("input"), val = normalizeWord(input.value);
-        cell.classList.remove("correct", "wrong", "hinted");
-        if (!val) empty++;
-        else if (val === cell.dataset.solution) { correct++; cell.classList.add("correct"); }
-        else { wrong++; cell.classList.add("wrong"); }
+    function getSdCell(r,c){ return sudokuGrid.querySelector(`.sd-cell[data-row="${r}"][data-col="${c}"]`); }
+    function getSdInput(r,c){ return getSdCell(r,c)?.querySelector("input") || null; }
+    function selectSudokuCell(row,col){
+      app.selectedSudoku={row,col};
+      const val=getSdInput(row,col)?.value;
+      document.querySelectorAll(".sd-cell").forEach(cell=>{
+        const r=Number(cell.dataset.row), c=Number(cell.dataset.col);
+        const sameBlock=Math.floor(r/3)===Math.floor(row/3)&&Math.floor(c/3)===Math.floor(col/3);
+        cell.classList.toggle("selected", r===row&&c===col);
+        cell.classList.toggle("related", r===row||c===col||sameBlock);
+        cell.classList.toggle("same-number", !!val && cell.querySelector("input").value===val);
       });
-      updateProgress();
-      if (!silent) {
-        if (wrong === 0 && empty === 0) completePuzzle();
-        else if (wrong === 0) setStatus(`Ошибок нет. Осталось заполнить клеток: ${empty}.`);
-        else setStatus(`Есть ошибки: ${wrong}. Правильных клеток: ${correct}.`);
+    }
+    function putSudokuNumber(n){
+      if(!app.selectedSudoku) return;
+      const {row,col}=app.selectedSudoku; const input=getSdInput(row,col); const cell=getSdCell(row,col);
+      if(!input || input.readOnly) return;
+      input.value = n ? String(n) : "";
+      cell.classList.remove("wrong","correct","hinted");
+      if(app.mistakesOn && n && Number(n)!==sd.solution[row][col]) cell.classList.add("wrong");
+      refreshMetrics(); selectSudokuCell(row,col); if(isSdSolved()) completeCurrentPuzzle();
+    }
+    function onSdInput(e){ const input=e.target; input.value=input.value.replace(/[^1-9]/g,"").slice(0,1); const cell=input.closest(".sd-cell"), r=Number(cell.dataset.row), c=Number(cell.dataset.col); cell.classList.remove("wrong","correct","hinted"); if(app.mistakesOn && input.value && Number(input.value)!==sd.solution[r][c]) cell.classList.add("wrong"); refreshMetrics(); selectSudokuCell(r,c); if(isSdSolved()) completeCurrentPuzzle(); }
+    function onSdKeydown(e){ const cell=e.target.closest(".sd-cell"), r=Number(cell.dataset.row), c=Number(cell.dataset.col); if(["Backspace","Delete"].includes(e.key)&&!e.target.readOnly){ e.target.value=""; cell.classList.remove("wrong","correct","hinted"); refreshMetrics(); }
+      if(["ArrowRight","ArrowLeft","ArrowUp","ArrowDown"].includes(e.key)){ e.preventDefault(); const map={ArrowRight:[0,1],ArrowLeft:[0,-1],ArrowUp:[-1,0],ArrowDown:[1,0]}; const [dr,dc]=map[e.key]; let nr=(r+dr+9)%9, nc=(c+dc+9)%9; getSdInput(nr,nc)?.focus(); }
+    }
+    function checkSudoku(silent=false){ let wrong=0, empty=0, correct=0; document.querySelectorAll(".sd-cell").forEach(cell=>{ const r=Number(cell.dataset.row), c=Number(cell.dataset.col), input=cell.querySelector("input"); cell.classList.remove("wrong","correct","hinted"); if(!input.value) empty++; else if(Number(input.value)===sd.solution[r][c]){ correct++; if(!cell.classList.contains("fixed")) cell.classList.add("correct"); } else { wrong++; cell.classList.add("wrong"); } }); refreshMetrics(); if(!silent){ if(wrong===0&&empty===0) completeCurrentPuzzle(); else if(wrong===0) setStatus(`Ошибок нет. Осталось клеток: ${empty}.`); else setStatus(`В судоку есть ошибки: ${wrong}. Правильных клеток: ${correct}.`); } return {wrong,empty,correct}; }
+    function hintSudoku(){ const max=currentDiff().maxHints; if(playModeSelect.value==="challenge" && app.hintsUsed>=max){ setStatus(`В челлендже лимит подсказок: ${max}.`); return; } const cells=[]; for(let r=0;r<9;r++) for(let c=0;c<9;c++){ const input=getSdInput(r,c); if(input && !input.readOnly && Number(input.value)!==sd.solution[r][c]) cells.push([r,c]); } if(!cells.length){ setStatus("Подсказка не нужна: судоку уже заполнено правильно."); return; } const [r,c]=cells[Math.floor(Math.random()*cells.length)], input=getSdInput(r,c), cell=getSdCell(r,c); input.value=sd.solution[r][c]; cell.classList.remove("wrong"); cell.classList.add("hinted"); app.hintsUsed++; updateScore(); refreshMetrics(); input.focus(); selectSudokuCell(r,c); setStatus(`Открыта одна цифра. Подсказок: ${app.hintsUsed}.`); if(isSdSolved()) completeCurrentPuzzle(); }
+    function clearSudoku(){ document.querySelectorAll(".sd-cell").forEach(cell=>{ const input=cell.querySelector("input"); if(!input.readOnly) input.value=""; cell.classList.remove("wrong","correct","hinted"); }); sd.revealed=false; app.hintsUsed=0; app.score=0; updateScore(); refreshMetrics(); restartTimer(); setStatus("Судоку очищено."); }
+    function revealSudoku(){ sd.revealed=true; for(let r=0;r<9;r++) for(let c=0;c<9;c++){ const input=getSdInput(r,c), cell=getSdCell(r,c); input.value=sd.solution[r][c]; cell.classList.remove("wrong"); if(!cell.classList.contains("fixed")) cell.classList.add("correct"); } refreshMetrics(); setStatus("Решение судоку раскрыто."); }
+    function isSdSolved(){ for(let r=0;r<9;r++) for(let c=0;c<9;c++){ if(Number(getSdInput(r,c)?.value)!==sd.solution[r][c]) return false; } return true; }
+
+    function refreshMetrics(){
+      const diff=currentDiff();
+      gameInfo.textContent = app.game === "crossword" ? `${CATEGORY_META[categorySelect.value].note} · ${diff.label}` : `Судоку 9×9 · ${diff.label}`;
+      if(app.game==="crossword"){
+        levelView.textContent=app.crosswordLevel;
+        metric2Label.textContent="Слова"; metric2View.textContent=cw.puzzle?.placed?.length || 0;
+        seedView.textContent=cw.puzzle ? `seed ${hashSeed(cw.puzzle.seedText).toString(16).slice(0,6)}` : "";
+        const inputs=[...crosswordGrid.querySelectorAll("input")]; const filled=inputs.filter(i=>i.value).length; filledView.textContent=inputs.length?`${Math.round(filled/inputs.length*100)}%`:"0%";
+      } else {
+        levelView.textContent=app.sudokuLevel;
+        metric2Label.textContent="Дано"; metric2View.textContent=sd.givens || 0;
+        seedView.textContent=sd.seedText ? `seed ${hashSeed(sd.seedText).toString(16).slice(0,6)}` : "";
+        const inputs=[...sudokuGrid.querySelectorAll("input")].filter(i=>!i.readOnly); const filled=inputs.filter(i=>i.value).length; filledView.textContent=inputs.length?`${Math.round(filled/inputs.length*100)}%`:"0%";
       }
-      return { correct, wrong, empty };
     }
+    function calculateScore(){ const seconds=Math.floor((Date.now()-app.startedAt)/1000); const diff=currentDiff(); const modeMult={relaxed:.9, classic:1, challenge:1.35}[playModeSelect.value] || 1; const level=app.game==="crossword"?app.crosswordLevel:app.sudokuLevel; const revealPenalty=(app.game==="crossword"?cw.revealed:sd.revealed)?4000:0; return Math.max(50, Math.round((2200 + level*180) * diff.score * modeMult - seconds*5 - app.hintsUsed*160 - revealPenalty)); }
+    function completeCurrentPuzzle(){ clearInterval(app.timer); app.score=calculateScore(); updateScore(); const seconds=Math.floor((Date.now()-app.startedAt)/1000); const name=app.game==="crossword"?"Кроссворд":"Судоку"; $("winTitle").textContent=`🏆 ${name} решён!`; $("winText").textContent=`Время: ${formatTime(seconds)}. Подсказок: ${app.hintsUsed}. Очки: ${app.score}. Следующий уровень будет сложнее.`; setStatus(`Победа! ${name} решён.`); winModal.classList.add("open"); }
 
-    function isSolved() {
-      const inputs = [...gridEl.querySelectorAll("input")];
-      return inputs.length > 0 && inputs.every(input => normalizeWord(input.value) === input.closest(".cell").dataset.solution);
-    }
+    function toggleMode(){ const next=document.body.dataset.mode==="light"?"dark":"light"; document.body.dataset.mode=next; $("modeBtn").textContent=next==="light"?"🌙 Тёмный режим":"☀️ Светлый режим"; saveSettings(); }
 
-    function completePuzzle() {
-      clearInterval(timer);
-      document.querySelectorAll(".cell.active").forEach(cell => { cell.classList.remove("wrong", "hinted"); cell.classList.add("correct"); });
-      updateScorePreview();
-      const seconds = Math.floor((Date.now() - startedAt) / 1000);
-      const mode = modeSelect.value === "challenge" ? " · режим челлендж" : "";
-      document.getElementById("winText").textContent = `Уровень ${level} пройден за ${formatTime(seconds)}. Тема: ${CATEGORY_META[categorySelect.value].title}. Подсказок: ${hintsUsed}. Очки: ${currentScore}${mode}.`;
-      setStatus(`Победа! Уровень ${level} решён.`);
-      winModal.classList.add("open");
-    }
+    $("crosswordTab").addEventListener("click",()=>setGame("crossword", !cw.puzzle));
+    $("sudokuTab").addEventListener("click",()=>setGame("sudoku", !sd.puzzle));
+    $("newBtnTop").addEventListener("click",()=>startCurrentPuzzle(false));
+    $("modeBtn").addEventListener("click",toggleMode);
+    $("installBtn").addEventListener("click",()=>installModal.classList.add("open"));
+    $("closeInstallBtn").addEventListener("click",()=>installModal.classList.remove("open"));
+    $("closeWinBtn").addEventListener("click",()=>winModal.classList.remove("open"));
+    $("modalNextBtn").addEventListener("click",()=>startCurrentPuzzle(true));
+    winModal.addEventListener("click",e=>{ if(e.target===winModal) winModal.classList.remove("open"); });
+    installModal.addEventListener("click",e=>{ if(e.target===installModal) installModal.classList.remove("open"); });
 
-    function revealPuzzle() {
-      revealed = true;
-      document.querySelectorAll(".cell.active").forEach(cell => {
-        const input = cell.querySelector("input");
-        input.value = cell.dataset.solution;
-        cell.classList.remove("wrong"); cell.classList.add("correct");
-      });
-      updateProgress();
-      setStatus("Все ответы раскрыты. Можно начать следующий кроссворд.");
-    }
+    $("cwCheckBtn").addEventListener("click",()=>checkCrossword(false));
+    $("cwHintBtn").addEventListener("click",hintCrossword);
+    $("cwClearBtn").addEventListener("click",clearCrossword);
+    $("cwNextBtn").addEventListener("click",()=>startCurrentPuzzle(true));
+    $("cwRebuildBtn").addEventListener("click",()=>startCurrentPuzzle(false));
+    $("cwRevealBtn").addEventListener("click",revealCrossword);
 
-    function hint() {
-      const diff = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
-      const mode = modeSelect.value;
-      if (mode === "challenge" && hintsUsed >= diff.maxHints) {
-        setStatus(`В челлендж-режиме лимит подсказок: ${diff.maxHints}.`);
-        return;
-      }
-      const cells = [...document.querySelectorAll(".cell.active")].filter(cell => normalizeWord(cell.querySelector("input").value) !== cell.dataset.solution);
-      if (!cells.length) { setStatus("Подсказка не нужна: всё уже заполнено правильно."); return; }
-      const cell = cells[Math.floor(Math.random() * cells.length)];
-      const input = cell.querySelector("input");
-      input.value = cell.dataset.solution;
-      cell.classList.remove("wrong"); cell.classList.add("hinted");
-      hintsUsed++; hintsView.textContent = hintsUsed;
-      input.focus(); updateProgress();
-      setStatus(`Открыта одна буква. Использовано подсказок: ${hintsUsed}.`);
-      if (isSolved()) completePuzzle();
-    }
+    $("sdCheckBtn").addEventListener("click",()=>checkSudoku(false));
+    $("sdHintBtn").addEventListener("click",hintSudoku);
+    $("sdClearBtn").addEventListener("click",clearSudoku);
+    $("sdNextBtn").addEventListener("click",()=>startCurrentPuzzle(true));
+    $("sdRevealBtn").addEventListener("click",revealSudoku);
+    $("sdMistakesBtn").addEventListener("click",()=>{ app.mistakesOn=!app.mistakesOn; $("sdMistakesBtn").textContent=app.mistakesOn?"🎯 Ошибки: вкл":"🎯 Ошибки: выкл"; setStatus(app.mistakesOn?"Мгновенная проверка ошибок включена.":"Мгновенная проверка ошибок выключена."); });
 
-    function clearPuzzle() {
-      document.querySelectorAll(".cell.active input").forEach(input => input.value = "");
-      document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("correct", "wrong", "hinted"));
-      updateProgress(); restartTimer(); setStatus("Поле очищено. Можно решать заново.");
-    }
+    categorySelect.addEventListener("change",()=>{ saveSettings(); if(app.game==="crossword") startCurrentPuzzle(false); });
+    difficultySelect.addEventListener("change",()=>{ saveSettings(); startCurrentPuzzle(false); });
+    playModeSelect.addEventListener("change",()=>{ saveSettings(); setStatus(`Режим изменён: ${playModeSelect.options[playModeSelect.selectedIndex].text}.`); });
+    visualSelect.addEventListener("change",()=>{ document.body.dataset.visual=visualSelect.value; saveSettings(); });
 
-    function nextPuzzle() {
-      winModal.classList.remove("open");
-      level++; localStorage.setItem("crosswordLevel", String(level));
-      startNewPuzzle(false);
-    }
+    if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 
-    function startNewPuzzle(resetLevel = false) {
-      if (resetLevel) { level = 1; localStorage.setItem("crosswordLevel", String(level)); }
-      try { puzzle = generatePuzzle(); renderPuzzle(); }
-      catch (err) { console.error(err); setStatus("Не удалось собрать сетку. Попробуй другую тему или нажми «Новый» ещё раз."); }
-    }
-
-    function restartTimer() {
-      clearInterval(timer); startedAt = Date.now(); timeView.textContent = "00:00";
-      timer = setInterval(() => { const seconds = Math.floor((Date.now() - startedAt) / 1000); timeView.textContent = formatTime(seconds); updateScorePreview(); }, 1000);
-    }
-    function formatTime(totalSeconds) { return `${String(Math.floor(totalSeconds / 60)).padStart(2, "0")}:${String(totalSeconds % 60).padStart(2, "0")}`; }
-    function setStatus(text) { statusEl.textContent = text; }
-
-    function saveSettings() {
-      localStorage.setItem("crosswordSettings", JSON.stringify({ category: categorySelect.value, difficulty: difficultySelect.value, visual: visualSelect.value, mode: modeSelect.value, colorMode: document.body.dataset.mode }));
-    }
-
-    function loadSettings() {
-      try {
-        const saved = JSON.parse(localStorage.getItem("crosswordSettings") || "{}");
-        if (saved.category && CATEGORY_META[saved.category]) categorySelect.value = saved.category;
-        if (saved.difficulty && DIFFICULTY[saved.difficulty]) difficultySelect.value = saved.difficulty;
-        if (saved.visual) visualSelect.value = saved.visual;
-        if (saved.mode) modeSelect.value = saved.mode;
-        if (saved.colorMode) document.body.dataset.mode = saved.colorMode;
-      } catch {}
-      document.body.dataset.visual = visualSelect.value;
-      updateModeButton();
-    }
-
-    function updateModeButton() { document.getElementById("modeBtn").textContent = document.body.dataset.mode === "dark" ? "☀️ Светлый режим" : "🌙 Тёмный режим"; }
-
-    document.getElementById("checkBtn").addEventListener("click", () => checkPuzzle(false));
-    document.getElementById("hintBtn").addEventListener("click", hint);
-    document.getElementById("clearBtn").addEventListener("click", clearPuzzle);
-    document.getElementById("revealBtn").addEventListener("click", revealPuzzle);
-    document.getElementById("nextBtn").addEventListener("click", nextPuzzle);
-    document.getElementById("sameBtn").addEventListener("click", () => startNewPuzzle(false));
-    document.getElementById("modalNextBtn").addEventListener("click", nextPuzzle);
-    document.getElementById("closeWinBtn").addEventListener("click", () => winModal.classList.remove("open"));
-    document.getElementById("newBtnTop").addEventListener("click", () => startNewPuzzle(false));
-    document.getElementById("installBtn").addEventListener("click", () => installModal.classList.add("open"));
-    document.getElementById("closeInstallBtn").addEventListener("click", () => installModal.classList.remove("open"));
-    document.getElementById("modeBtn").addEventListener("click", () => { document.body.dataset.mode = document.body.dataset.mode === "dark" ? "light" : "dark"; updateModeButton(); saveSettings(); });
-
-    [categorySelect, difficultySelect, modeSelect].forEach(el => el.addEventListener("change", () => { saveSettings(); startNewPuzzle(false); }));
-    visualSelect.addEventListener("change", () => { document.body.dataset.visual = visualSelect.value; saveSettings(); });
-    [winModal, installModal].forEach(modal => modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); }));
-
-    prepareBanks(); fillCategorySelect(); loadSettings(); startNewPuzzle(false);
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-    }
+    prepareBanks(); fillSelects(); loadSettings(); setGame(app.game, false); startCurrentPuzzle(false);
   </script>
 </body>
 </html>
